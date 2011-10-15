@@ -1,0 +1,11 @@
+[15 October 2011]
+"Revolution" is (will be) an API for optimization of single & multi-objective real-valued functions. The API will be written in C++. The main
+features of the API will be:
+
+1. Run optimization tasks for single objective real-valued functions using adaptive evolution strategies like CMA-ES. 
+2. Combine evolution strategy algorithms with multi-objective genetic algorithms like NSGA-II & SPEA-2 to optimize 
+    real-valued multi-objective functions. 
+
+The API will be written in ANSI C++.  I would like to keep things as simple as possible, and not use any third party library. However, a possible candidate 
+is Boost, since it offers a good RNG, and a way to expose functionality through python. It also offers code testing capabilities.  I haven't made up my mind 
+about the build system and the library license, though we will probably use cmake and a Boost compatible license. 
