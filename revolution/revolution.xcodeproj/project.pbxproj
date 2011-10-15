@@ -6,9 +6,16 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		522D2F581449A07300B568C1 /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = 522D2F571449A07300B568C1 /* version.h */; };
+		522D2F5A1449A1E400B568C1 /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 522D2F591449A1E400B568C1 /* version.cpp */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		522325841448C43D00A94C60 /* librevolution.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = librevolution.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		522D2F5514499CA000B568C1 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		522D2F571449A07300B568C1 /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = version.h; sourceTree = "<group>"; };
+		522D2F591449A1E400B568C1 /* version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = version.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -25,6 +32,8 @@
 		522325791448C43D00A94C60 = {
 			isa = PBXGroup;
 			children = (
+				522D2F591449A1E400B568C1 /* version.cpp */,
+				522D2F571449A07300B568C1 /* version.h */,
 				522D2F5514499CA000B568C1 /* README */,
 				522325851448C43D00A94C60 /* Products */,
 			);
@@ -45,6 +54,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				522D2F581449A07300B568C1 /* version.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +108,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				522D2F5A1449A1E400B568C1 /* version.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
