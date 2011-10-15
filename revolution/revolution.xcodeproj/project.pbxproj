@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		522325841448C43D00A94C60 /* librevolution.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = librevolution.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		522D2F5514499CA000B568C1 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -24,6 +25,7 @@
 		522325791448C43D00A94C60 = {
 			isa = PBXGroup;
 			children = (
+				522D2F5514499CA000B568C1 /* README */,
 				522325851448C43D00A94C60 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -182,6 +184,7 @@
 				5223258A1448C43D00A94C60 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
