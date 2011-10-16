@@ -7,6 +7,7 @@
 //
 
 #include "version.h"
+#include <cstdio>
 
 using revolution::Version;
 
