@@ -10,6 +10,7 @@
 #define revolution_version_h
 
 #include <string>
+#include "defines.h"
 
 namespace revolution {
 	/*
@@ -21,7 +22,7 @@ namespace revolution {
 	#define API_MINOR	0
 	#define API_PATCH	0
 	
-	class Version 
+	class DLL_PUBLIC Version 
 	{
 	public:
 		static int getMajor();
