@@ -6,4 +6,5 @@ include_directories (include)
 
 add_subdirectory (src)
 add_subdirectory (simple-client)
+add_subdirectory (simple-client-c)
 add_subdirectory (doxygen)
