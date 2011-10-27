@@ -4,19 +4,19 @@
 using revolution::Version;
 
 extern "C" 
-int rv_major_version(void)
+int RVGetMajorVersion(void)
 {
 	return Version::getMajor();
 }
 
 extern "C"
-int rv_minor_version(void)
+int RVGetMinorVersion(void)
 {
 	return Version::getMinor();
 }
 
 extern "C"
-int rv_patch_version(void)
+int RVGetPatchVersion(void)
 {
 	return Version::getPatch();
 }

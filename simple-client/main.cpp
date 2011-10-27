@@ -4,8 +4,12 @@
 int main(int argc, char *argv[])
 {
 	std::cout << "API: " 
-		  << rv_major_version() << "." 
-		  << rv_minor_version() << "." 
-		  << rv_patch_version() << std::endl;
+		  << RVGetMajorVersion() << "." 
+		  << RVGetMinorVersion() << "." 
+		  << RVGetPatchVersion() << std::endl;
+
+	std::cout << "API: "
+			<< RV_API_MAJOR << "." << RV_API_MINOR << "." << RV_API_PATCH << std::endl;
+
 	return 0;
 }

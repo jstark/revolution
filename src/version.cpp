@@ -14,19 +14,19 @@ using revolution::Version;
 /*---------------------------------------------------------------------------*/
 int Version::getMajor()
 {
-	return API_MAJOR;
+	return RV_API_MAJOR;
 }
 
 /*---------------------------------------------------------------------------*/
 int Version::getMinor()
 {
-	return API_MINOR;
+	return RV_API_MINOR;
 }
 
 /*---------------------------------------------------------------------------*/
 int Version::getPatch()
 {
-	return API_PATCH;
+	return RV_API_PATCH;
 }
 
 /*---------------------------------------------------------------------------*/
