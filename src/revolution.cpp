@@ -1,4 +1,4 @@
-#include "../include/revolution.h"
+#include "revolution.h"
 #include "version.h"
 
 using revolution::Version;
