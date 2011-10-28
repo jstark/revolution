@@ -4,6 +4,10 @@
 #ifndef REVOLUTION_H_INCLUDED
 #define REVOLUTION_H_INCLUDED
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* From API C++ */
 #if defined _WIN32 || defined __CYGWIN__
 	#ifdef revolution_EXPORTS // define this when generating DLL
@@ -30,9 +34,6 @@
 	#endif
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #define RV_API_MAJOR	0
 #define RV_API_MINOR	0
