@@ -4,10 +4,6 @@
 #ifndef REVOLUTION_H_INCLUDED
 #define REVOLUTION_H_INCLUDED
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* From API C++ */
 #if defined _WIN32 || defined __CYGWIN__
 	#ifdef revolution_EXPORTS // define this when generating DLL
@@ -34,10 +30,13 @@ extern "C" {
 	#endif
 #endif
 
-
 #define RV_API_MAJOR	0
 #define RV_API_MINOR	0
 #define RV_API_PATCH	0
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 		
 DLL_PUBLIC int RVGetMajorVersion(void);
 DLL_PUBLIC int RVGetMinorVersion(void);
@@ -65,12 +64,12 @@ typedef int (*RVObjectiveEvalFun)(const double *designVector, double *objectives
 /*! \fn RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun);
  *  \brief Creates an object that defines an optimization problem.
  */
-DLL_PUBLIC RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun);
+DLL_PUBLIC struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun);
 
 /*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
  *  \brief Destroys an RVObjectiveFunction object.
  */
-DLL_PUBLIC void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
+DLL_PUBLIC void RVObjectiveFunctionDestroy(struct RVObjectiveFunction *object);
 
 /*! \fn RVEvolutionStrategy* RVEvolutionStrategyCreate(RVObjectiveFunction *fun);
  *  \brief Creates an object that represents an evolution strategy.
