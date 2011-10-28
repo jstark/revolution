@@ -8,10 +8,11 @@ int evalf(const double *dv, double *obj)
 
 int main(int argc, char *argv[])
 {
+	struct RVObjectiveFunction *obj = 0;
 	printf("API: %d.%d.%d\n", RVGetMajorVersion(), RVGetMinorVersion(), RVGetPatchVersion());
 	printf("API: %d.%d.%d\n", RV_API_MAJOR, RV_API_MINOR, RV_API_PATCH);
 
-	RVObjectiveFunction *object = RVObjectiveFunctionCreate(3, 2, evalf);
-	RVObjectiveFunctionDestroy(object);
+	obj = RVObjectiveFunctionCreate(3, 2, evalf);
+	RVObjectiveFunctionDestroy(obj);
 	return 0;
 }
