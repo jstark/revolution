@@ -66,6 +66,11 @@ typedef int (*RVObjectiveEvalFun)(const double *designVector, double *objectives
  */
 DLL_PUBLIC RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun);
 
+/*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
+ *  \brief Destroys an RVObjectiveFunction object.
+ */
+DLL_PUBLIC void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
+
 /*! \fn RVEvolutionStrategy* RVEvolutionStrategyCreate(RVObjectiveFunction *fun);
  *  \brief Creates an object that represents an evolution strategy.
  */
