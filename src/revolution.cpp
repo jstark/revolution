@@ -36,7 +36,7 @@ int RVGetPatchVersion(void)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjectiveEvalFun fun)
+struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjectiveEvalFun fun)
 {
 	ObjectiveFunction *objfun = ObjectiveFunction::create(dim, objs, fun);
 	RVObjectiveFunction *objfunWrapper = 0;
@@ -49,7 +49,7 @@ RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjectiveEva
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVObjectiveFunctionDestroy(RVObjectiveFunction* object)
+void RVObjectiveFunctionDestroy(struct RVObjectiveFunction* object)
 {
 	if (object)
 	{

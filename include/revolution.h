@@ -74,7 +74,7 @@ DLL_PUBLIC void RVObjectiveFunctionDestroy(struct RVObjectiveFunction *object);
 /*! \fn RVEvolutionStrategy* RVEvolutionStrategyCreate(RVObjectiveFunction *fun);
  *  \brief Creates an object that represents an evolution strategy.
  */
-DLL_PUBLIC RVEvolutionStrategy* RVEvolutionStrategyCreate(RVObjectiveFunction *fun);
+DLL_PUBLIC struct RVEvolutionStrategy* RVEvolutionStrategyCreate(struct RVObjectiveFunction *fun);
 
 #ifdef __cplusplus
 }
