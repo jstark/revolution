@@ -5,6 +5,7 @@ project (revolution)
 include_directories (include)
 
 add_subdirectory (src)
-add_subdirectory (simple-client)
-add_subdirectory (simple-client-c)
 add_subdirectory (doxygen)
+
+enable_testing()
+add_subdirectory (test)
