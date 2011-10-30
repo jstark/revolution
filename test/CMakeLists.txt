@@ -1,3 +1,4 @@
+include_directories (../src)
 add_subdirectory (simple-cpp-client)
 add_subdirectory (simple-c-client)
 
