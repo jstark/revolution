@@ -16,6 +16,7 @@ namespace revolution
 	private:
 			ObjectiveFunction(int dim, int obj, RVObjectiveEvalFun fun);
 			ObjectiveFunction(const ObjectiveFunction& rhs); // not implemented
+			ObjectiveFunction& operator=(const ObjectiveFunction& rhs); // not implemented
 			int dimensionality;
 			int objectivesNumber;
 			RVObjectiveEvalFun evalf;
