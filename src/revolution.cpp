@@ -90,6 +90,16 @@ RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int la
 }
 
 /*---------------------------------------------------------------------------*/
+void RVBasicEvolutionStrategyPopulationSetInitialValues(RVBasicEvolutionStrategy *es, RVPopulationSetInitialValues fun, void *data)
+{
+	if (es)
+	{
+		BasicEs *basic = GET_WRAPPED_OBJECT(es);
+		basic->setPopulationInitialValues(fun, data);
+	}
+}
+
+/*---------------------------------------------------------------------------*/
 extern "C"
 void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es)
 {

@@ -12,6 +12,8 @@ namespace revolution
 	{
 	public:
 		static BasicEs* create(int mu, int rho, int lambda, RVSelectionMode mode, ObjectiveFunction *objf);
+
+		void setPopulationInitialValues(RVPopulationSetInitialValues fun, void *data);
 	private:
 		BasicEs(int mu, int rho, int lambda, RVSelectionMode mode, ObjectiveFunction *objf);
 		BasicEs(const BasicEs& rhs); // not implemented
@@ -19,7 +21,8 @@ namespace revolution
 		int mu, rho, lambda;
 		RVSelectionMode mode;
 		ObjectiveFunction *objfun;
-
+		RVPopulationSetInitialValues initialValuesFun;
+		void *initialValuesFunData;
 	};//~ BasicEs
 
 }//~ revolution

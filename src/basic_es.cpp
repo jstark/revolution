@@ -6,9 +6,16 @@ using revolution::ObjectiveFunction;
 
 /*---------------------------------------------------------------------------*/
 BasicEs::BasicEs(int m, int r, int la, RVSelectionMode sel, ObjectiveFunction *objf)
-	: mu(m), rho(r), lambda(la), mode(sel), objfun(objf)
+	: mu(m), rho(r), lambda(la), mode(sel), objfun(objf), initialValuesFun(0)
 {
 
+}
+
+/*---------------------------------------------------------------------------*/
+void BasicEs::setPopulationInitialValues(RVPopulationSetInitialValues fun, void *data)
+{
+	initialValuesFun = fun;
+	initialValuesFunData = data;
 }
 
 /*--------------------------------------------------------------------------*/

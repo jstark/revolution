@@ -42,20 +42,15 @@ DLL_PUBLIC int RVGetMajorVersion(void);
 DLL_PUBLIC int RVGetMinorVersion(void);
 DLL_PUBLIC int RVGetPatchVersion(void);
 
-/*! \var RVEvolutionStrategy
- *  \brief The library's main object type.
- */
-/*typedef struct RVEvolutionStrategy RVEvolutionStrategy;*/
-
 struct RVObjectiveFunction;
 
 /*! \var RVObjectiveFunction
- *  \brief The object that defines an optimization problem.
+ *  \brief The type that represents an optimization problem.
  */
 typedef struct RVObjectiveFunction RVObjectiveFunction;
 
 /*! \var RVObjectiveEvalFun
- *  \brief A pointer to a function that evaluates a design vector.
+ *  \brief A function that evaluates a design vector.
  */
 typedef int (*RVObjectiveEvalFun)(const double *designVector, double *objectivesEvaluation);
 
@@ -69,13 +64,13 @@ DLL_PUBLIC RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objective
  */
 DLL_PUBLIC void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
 
-/*!
- *
+/*! \var RVBasicEvolutionStrategy
+ *  \brief The type that represents a basic evolution strategy.
  */
 typedef struct RVBasicEvolutionStrategy RVBasicEvolutionStrategy;
 
-/*!
- *
+/*! \var RVSelectionMode
+ *	\brief The selection operator's selection mode.
  */
 typedef enum RVSelectionMode
 {
@@ -88,6 +83,16 @@ typedef enum RVSelectionMode
  *  \brief Creates an object that represents an evolution strategy.
  */
 DLL_PUBLIC RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int lambda, RVSelectionMode mode, RVObjectiveFunction *fun);
+
+/*! \fn RVPopulationSetInitialValues
+ *  \brief A function that calculates the initial population values. 
+ */
+typedef double (*RVPopulationSetInitialValues)(int atom, int variable, void *data);
+
+/* \fn void RVBasicEvolutionStrategyPopulationSetInitialValues(RVBasicEvolutionStrategy *es, RVSetPopulationInitialValues fun);
+ * \brief Sets a function that will be called to calculate the initial values of the population. 
+ */
+DLL_PUBLIC void RVBasicEvolutionStrategyPopulationSetInitialValues(RVBasicEvolutionStrategy *es, RVPopulationSetInitialValues fun, void *data);
 
 /*! \fn void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es);
  *  \brief Destroys an RVBasicEvolutionStrategy objects and frees memory.
