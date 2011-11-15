@@ -8,15 +8,9 @@ int evalf(const double *dv, double *obj)
 
 int main(int argc, char *argv[])
 {
-	std::cout << "API: " 
-		  << RVGetMajorVersion() << "." 
-		  << RVGetMinorVersion() << "." 
-		  << RVGetPatchVersion() << std::endl;
-
-	std::cout << "API: "
-			<< RV_API_MAJOR << "." << RV_API_MINOR << "." << RV_API_PATCH << std::endl;
-
 	RVObjectiveFunction *object = RVObjectiveFunctionCreate(3, 2, evalf);
+	RVBasicEvolutionStrategy *es = RVBasicEvolutionStrategyCreate(3, 1, 4, kRVSelectionModeComma, object);
+	RVBasicEvolutionStrategyDestroy(es);
 	RVObjectiveFunctionDestroy(object);
 
 	return 0;
