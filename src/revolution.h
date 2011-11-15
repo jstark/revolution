@@ -42,12 +42,13 @@ DLL_PUBLIC int RVGetMajorVersion(void);
 DLL_PUBLIC int RVGetMinorVersion(void);
 DLL_PUBLIC int RVGetPatchVersion(void);
 
-struct RVEvolutionStrategy;
+struct RVBasicEvolutionStrategy;
+typedef struct RVBasicEvolutionStrategy RVBasicEvolutionStrategy;
 
 /*! \var RVEvolutionStrategy
  *  \brief The library's main object type.
  */
-typedef struct RVEvolutionStrategy RVEvolutionStrategy;
+/*typedef struct RVEvolutionStrategy RVEvolutionStrategy;*/
 
 struct RVObjectiveFunction;
 
@@ -64,17 +65,37 @@ typedef int (*RVObjectiveEvalFun)(const double *designVector, double *objectives
 /*! \fn RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun);
  *  \brief Creates an object that defines an optimization problem.
  */
-DLL_PUBLIC struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun);
+DLL_PUBLIC RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun);
 
 /*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
  *  \brief Destroys an RVObjectiveFunction object.
  */
-DLL_PUBLIC void RVObjectiveFunctionDestroy(struct RVObjectiveFunction *object);
+DLL_PUBLIC void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
 
-/*! \fn RVEvolutionStrategy* RVEvolutionStrategyCreate(RVObjectiveFunction *fun);
+/*!
+ *
+ */
+typedef struct RVBasicEvolutionStrategy RVBasicEvolutionStrategy;
+
+/*!
+ *
+ */
+typedef enum RVSelectionMode
+{
+	kRVSelectionModeInvalid,
+	kRVSelectionModePlus,
+	kRVSelectionModeComma
+} RVSelectionMode;
+
+/*! \fn RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int lambda, RVObjectiveFunction *fun);
  *  \brief Creates an object that represents an evolution strategy.
  */
-DLL_PUBLIC struct RVEvolutionStrategy* RVEvolutionStrategyCreate(struct RVObjectiveFunction *fun);
+DLL_PUBLIC RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int lambda, RVSelectionMode mode, RVObjectiveFunction *fun);
+
+/*! \fn void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es);
+ *  \brief Destroys an RVBasicEvolutionStrategy objects and frees memory.
+ */
+DLL_PUBLIC void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es);
 
 #ifdef __cplusplus
 }

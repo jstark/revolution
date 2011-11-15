@@ -1,17 +1,32 @@
 #include "revolution.h"
 #include "version.h"
 #include "objective_function.h"
+#include "basic_es.h"
+#include <stdio.h>
 
 using revolution::Version;
 using revolution::ObjectiveFunction;
+using revolution::BasicEs;
 
 /*---------------------------------------------------------------------------*/
-struct RVObjectiveFunction
-{
-		RVObjectiveFunction(ObjectiveFunction *objfun) : impl(objfun) {}
-		~RVObjectiveFunction() { delete static_cast<ObjectiveFunction *>(impl);}
-		void *impl;
-};//~ RVObjectiveFunction
+
+#define DEFINE_POD_WRAPPER_STRUCT(ClassName, WrappedClass) \
+	struct ClassName { \
+		WrappedClass *impl; \
+	};
+
+#define SET_WRAPPED_OBJECT(WrapperObject, WrappedObject) (WrapperObject)->impl = WrappedObject
+#define GET_WRAPPED_OBJECT(WrapperObject) ((WrapperObject)->impl)
+
+DEFINE_POD_WRAPPER_STRUCT(RVObjectiveFunction, ObjectiveFunction)
+DEFINE_POD_WRAPPER_STRUCT(RVBasicEvolutionStrategy, BasicEs)
+
+#define CONSTRUCT_POD_OBJECT(ClassName) \
+	static_cast<ClassName *>(calloc(1, sizeof(ClassName)))
+
+#define FREE_POD_OBJECT(Object) \
+	free(Object)
+
 
 /*---------------------------------------------------------------------------*/
 extern "C" 
@@ -39,12 +54,13 @@ extern "C"
 struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjectiveEvalFun fun)
 {
 	ObjectiveFunction *objfun = ObjectiveFunction::create(dim, objs, fun);
-	RVObjectiveFunction *objfunWrapper = 0;
+	RVObjectiveFunction *wrapper = 0;
 	if (objfun)
 	{
-		objfunWrapper = new RVObjectiveFunction(objfun);
+		wrapper = CONSTRUCT_POD_OBJECT(RVObjectiveFunction);
+		SET_WRAPPED_OBJECT(wrapper, objfun);
 	} 
-	return objfunWrapper;
+	return wrapper;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -53,6 +69,34 @@ void RVObjectiveFunctionDestroy(struct RVObjectiveFunction* object)
 {
 	if (object)
 	{
-		delete object;
+		ObjectiveFunction *of = GET_WRAPPED_OBJECT(object);
+		delete of;
+		FREE_POD_OBJECT(object);
+	}
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int lambda, RVSelectionMode mode, RVObjectiveFunction *fun)
+{
+	BasicEs *es = BasicEs::create(mu, rho, lambda, mode, GET_WRAPPED_OBJECT(fun));
+	RVBasicEvolutionStrategy *wrapper = 0;
+	if (es)
+	{
+		wrapper = CONSTRUCT_POD_OBJECT(RVBasicEvolutionStrategy);
+		SET_WRAPPED_OBJECT(wrapper, es);
+	}
+	return wrapper;
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es)
+{
+	if (es)
+	{
+		BasicEs *b = GET_WRAPPED_OBJECT(es);
+		delete b;
+		FREE_POD_OBJECT(es);
 	}
 }
