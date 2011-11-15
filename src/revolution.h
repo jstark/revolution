@@ -42,9 +42,6 @@ DLL_PUBLIC int RVGetMajorVersion(void);
 DLL_PUBLIC int RVGetMinorVersion(void);
 DLL_PUBLIC int RVGetPatchVersion(void);
 
-struct RVBasicEvolutionStrategy;
-typedef struct RVBasicEvolutionStrategy RVBasicEvolutionStrategy;
-
 /*! \var RVEvolutionStrategy
  *  \brief The library's main object type.
  */
