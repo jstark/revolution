@@ -7,8 +7,11 @@ SET (rev_src
 		revolution.h
 		objective_function.cpp
 		objective_function.h
+		basic_es.h
+		basic_es.cpp
 )
 
 add_library (revolution SHARED ${rev_src})
+set_target_properties(revolution PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${COMMON_OUTPUT_DIR})
 install (TARGETS revolution DESTINATION "${PROJECT_BINARY_DIR}/lib")
 install (FILES revolution.h DESTINATION "${PROJECT_BINARY_DIR}/include")
