@@ -1,14 +1,29 @@
 #include "basic_es.h"
 #include "objective_function.h"
+#include "population.h"
 
 using revolution::BasicEs;
 using revolution::ObjectiveFunction;
+
+/*--------------------------------------------------------------------------*/
+class BasicEs::Population : private revolution::Population
+{
+public:
+	Population(int mu, int lambda, int dim);
+};//~ BasicEs::Population
+
+/*--------------------------------------------------------------------------*/
+BasicEs::Population::Population(int mu, int lambda, int dim)
+	: revolution::Population(mu, lambda, dim)
+{
+
+}
 
 /*---------------------------------------------------------------------------*/
 BasicEs::BasicEs(int m, int r, int la, RVSelectionMode sel, ObjectiveFunction *objf)
 	: mu(m), rho(r), lambda(la), mode(sel), objfun(objf), initialValuesFun(0)
 {
-
+	population.reset(new Population(m, la, objf->dim()));
 }
 
 /*---------------------------------------------------------------------------*/

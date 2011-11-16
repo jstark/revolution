@@ -9,6 +9,10 @@ SET (rev_src
 		objective_function.h
 		basic_es.h
 		basic_es.cpp
+		atom.h
+		atom.cpp
+		population.h
+		population.cpp
 )
 
 add_library (revolution SHARED ${rev_src})

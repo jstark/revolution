@@ -2,10 +2,10 @@
 #define REVOLUTION_BASIC_ES_HPP_INCLUDED
 
 #include "revolution.h"
+#include <memory>
 
 namespace revolution
 {
-	
 	class ObjectiveFunction;
 
 	class BasicEs
@@ -18,13 +18,17 @@ namespace revolution
 		BasicEs(int mu, int rho, int lambda, RVSelectionMode mode, ObjectiveFunction *objf);
 		BasicEs(const BasicEs& rhs); // not implemented
 		BasicEs& operator=(const BasicEs& rhs); // not implemented
+
+		/* data members */
 		int mu, rho, lambda;
 		RVSelectionMode mode;
 		ObjectiveFunction *objfun;
 		RVPopulationSetInitialValues initialValuesFun;
 		void *initialValuesFunData;
-	};//~ BasicEs
 
+		class Population;
+		std::auto_ptr<Population> population;
+	};//~ BasicEs
 }//~ revolution
 
 #endif /* REVOLUTION_BASIC_ES_HPP_INCLUDED */
