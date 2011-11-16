@@ -2,7 +2,8 @@
 #include "version.h"
 #include "objective_function.h"
 #include "basic_es.h"
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 using revolution::Version;
 using revolution::ObjectiveFunction;
@@ -22,7 +23,7 @@ DEFINE_POD_WRAPPER_STRUCT(RVObjectiveFunction, ObjectiveFunction)
 DEFINE_POD_WRAPPER_STRUCT(RVBasicEvolutionStrategy, BasicEs)
 
 #define CONSTRUCT_POD_OBJECT(ClassName) \
-	static_cast<ClassName *>(calloc(1, sizeof(ClassName)))
+	static_cast<ClassName *>(std::calloc(1, sizeof(ClassName)))
 
 #define FREE_POD_OBJECT(Object) \
 	free(Object)
