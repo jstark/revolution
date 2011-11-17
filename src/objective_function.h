@@ -5,7 +5,7 @@
 
 namespace revolution
 {
-	class ObjectiveFunction
+	class DLL_HIDDEN ObjectiveFunction
 	{
 	public:
 			const int dim() const;

@@ -2,10 +2,11 @@
 #define REVOLUTION_ATOM_H_INCLUDED
 
 #include <vector>
+#include "revolution.h"
 
 namespace revolution
 {
-class Atom
+class DLL_HIDDEN Atom
 {
 public:
 	explicit Atom(int dim);

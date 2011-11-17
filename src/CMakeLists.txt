@@ -12,7 +12,6 @@ SET (rev_src
 		atom.h
 		atom.cpp
 		population.h
-		population.cpp
 )
 
 add_library (revolution SHARED ${rev_src})

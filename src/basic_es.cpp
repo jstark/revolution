@@ -1,36 +1,102 @@
 #include "basic_es.h"
 #include "objective_function.h"
 #include "population.h"
+#include "atom.h"
+#include <vector>
 
 using revolution::BasicEs;
 using revolution::ObjectiveFunction;
 
 /*--------------------------------------------------------------------------*/
-class BasicEs::Population : private revolution::Population
+namespace 
+{
+
+class Atom : private revolution::Atom
 {
 public:
-	Population(int mu, int lambda, int dim);
-};//~ BasicEs::Population
+	explicit Atom(int n)
+		: revolution::Atom(n), strParams(n, 0)
+	{
+
+	}
+
+	double strategyParam(int index) const 
+	{
+		return strParams.at(index);
+	}
+
+	void setStrategyParam(int index, double value)
+	{
+		strParams[index] = value;
+	}
+
+private:
+	std::vector<double> strParams; // endogenous strategy params
+};//~Atom for BasicEs
+
 
 /*--------------------------------------------------------------------------*/
-BasicEs::Population::Population(int mu, int lambda, int dim)
-	: revolution::Population(mu, lambda, dim)
+class Population : private revolution::Population<Atom>
 {
+public:
+	Population(int mu, int lambda, int dim)
+			: revolution::Population<Atom>(mu, lambda, dim)
+	{
 
-}
+	}
+};//~ BasicEs::Population
+
+}//~ unamed
+
+/*--------------------------------------------------------------------------*/
+class BasicEs::BasicEsPriv
+{
+public:
+	BasicEsPriv(int m, int r, int l, RVSelectionMode mode, ObjectiveFunction *objf)
+		: atoms(new ::Population(m, l, objf->dim())), selectionMode(mode), objectiveFunction(objf)
+	{
+
+	}
+
+ 	~BasicEsPriv()
+	{
+		delete atoms;
+		atoms = 0;
+	}
+
+	void setPopulationInitialValues(RVPopulationSetInitialValues fun, void *data)
+	{
+			initialValuesFun = fun;
+			initialValuesFunData = data;
+	}
+
+	::Population *atoms;	
+	RVSelectionMode selectionMode;
+	ObjectiveFunction *objectiveFunction;
+	RVPopulationSetInitialValues initialValuesFun;
+	void *initialValuesFunData;
+	
+};//~BasicEs::BasicEsPriv
+
 
 /*---------------------------------------------------------------------------*/
 BasicEs::BasicEs(int m, int r, int la, RVSelectionMode sel, ObjectiveFunction *objf)
-	: mu(m), rho(r), lambda(la), mode(sel), objfun(objf), initialValuesFun(0)
+	: impl(new BasicEs::BasicEsPriv(m, r, la, sel, objf))
 {
-	population.reset(new Population(m, la, objf->dim()));
+
 }
 
 /*---------------------------------------------------------------------------*/
+BasicEs::~BasicEs()
+{
+	delete impl;
+	impl = 0;
+}
+
+/*--------------------------------------------------------------------------*/
 void BasicEs::setPopulationInitialValues(RVPopulationSetInitialValues fun, void *data)
 {
-	initialValuesFun = fun;
-	initialValuesFunData = data;
+	impl->setPopulationInitialValues(fun, data);
 }
 
 /*--------------------------------------------------------------------------*/

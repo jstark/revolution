@@ -13,7 +13,7 @@
 #include <string>
 
 namespace revolution {
-	class Version 
+	class DLL_HIDDEN Version 
 	{
 	public:
 		static int getMajor();
