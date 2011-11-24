@@ -92,7 +92,12 @@ typedef double (*RVPopulationSetInitialValues)(int atom, int variable, void *dat
 /* \fn void RVBasicEvolutionStrategyPopulationSetInitialValues(RVBasicEvolutionStrategy *es, RVSetPopulationInitialValues fun);
  * \brief Sets a function that will be called to calculate the initial values of the population. 
  */
-DLL_PUBLIC void RVBasicEvolutionStrategyPopulationSetInitialValues(RVBasicEvolutionStrategy *es, RVPopulationSetInitialValues fun, void *data);
+DLL_PUBLIC void RVBasicEvolutionStrategyInitializePopulation(RVBasicEvolutionStrategy *es, RVPopulationSetInitialValues fun, void *data);
+
+/* \fn void RVBasicEvolutionStrategyStart(RVBasicEvolutionStrategy *es);
+ * \brief Starts an evolution strategy
+ */
+DLL_PUBLIC void RVBasicEvolutionStrategyStart(RVBasicEvolutionStrategy *es);
 
 /*! \fn void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es);
  *  \brief Destroys an RVBasicEvolutionStrategy objects and frees memory.

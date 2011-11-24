@@ -14,6 +14,7 @@ namespace revolution
 
 		~BasicEs();
 		void setPopulationInitialValues(RVPopulationSetInitialValues fun, void *data);
+		void start();
 	private:
 		BasicEs(int mu, int rho, int lambda, RVSelectionMode mode, ObjectiveFunction *objf);
 		BasicEs(const BasicEs& rhs); // not implemented
