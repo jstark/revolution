@@ -133,8 +133,8 @@ public:
 	void apply(Atom& temp) const
 	{
 		static const int n = temp.dim();
-		static const double t0= 1.0/(2.0 * sqrt(n));
-		static const double t = 1.0/(sqrt(2.0 * sqrt(n)));
+		static const double t0= 1.0/(2.0 * sqrt(1.0*n));
+		static const double t = 1.0/(sqrt(2.0 * sqrt(1.0*n)));
 
 		double m0 = exp(t0 * normal_dist_num());
 		double mi = 0;
@@ -268,7 +268,7 @@ BasicEs* BasicEs::create(int mu, int rho, int lambda,RVSelectionMode mode, Objec
 {
 	bool invalidPopulation = mu < 0 || lambda < 0;
 	bool invalidRecombinationConstant = rho < 0 || rho > mu;
-	bool invalidSelectionMode = mode == kRVSelectionModeComma ? lambda >= mu : false;
+	bool invalidSelectionMode = mode == kRVSelectionModeComma ? (lambda >= mu ? false : true) : false;
 
 	if (invalidPopulation || invalidRecombinationConstant || invalidSelectionMode)
 	{
