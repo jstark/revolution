@@ -12,39 +12,40 @@ template<typename AType>
 class DLL_HIDDEN Population
 {
 public:
-	Population(int parents, int offsprings, int dim);
+	Population(int parents, int offsprings, int dim, int obj);
 
-	double designVariable(int atom, int var) const;
-	void setDesignVariable(int atom, int var, double value);
+	void initialize(RVPopulationSetInitialValues fun, void *data);
+	std::vector<AType *> mem_ref();
 private:
 	std::vector<AType> atoms;
-	const int mu;
-	const int lambda;
-	const int n; // dimensionality
 };//~ Population
 
 /*---------------------------------------------------------------------------*/
 template<typename AType>
-Population<AType>::Population(int parents, int offsprings, int dim)
-	: atoms(parents+offsprings, AType(dim)), mu(parents), lambda(offsprings), n(dim)
+Population<AType>::Population(int parents, int offsprings, int dim, int obj)
+	: atoms(parents+offsprings, AType(dim, obj))
 {
 
 }
 
 /*---------------------------------------------------------------------------*/
 template<typename AType>
-double Population<AType>::designVariable(int atom_index, int var_index) const
+void Population<AType>::initialize(RVPopulationSetInitialValues fun, void *data)
 {
-	const AType& ref = atoms[atom_index];
-	return ref[var_index];
+	//TODO
 }
 
 /*---------------------------------------------------------------------------*/
 template<typename AType>
-void Population<AType>::setDesignVariable(int atom_index, int var_index, double value)
+std::vector<AType *> Population<AType>::mem_ref()
 {
-	AType& ref = atoms[atom_index];
-	ref[var_index] = value;
+	std::vector<AType *> ref;
+	for (typename std::vector<AType>::size_type sz = 0;
+		sz != atoms.size(); ++sz)
+	{
+		ref.push_back(&atoms[sz]);
+	}
+	return ref;
 }
 
 }//~ revolution
