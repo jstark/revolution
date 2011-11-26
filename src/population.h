@@ -32,7 +32,11 @@ Population<AType>::Population(int parents, int offsprings, int dim, int obj)
 template<typename AType>
 void Population<AType>::initialize(RVPopulationSetInitialValues fun, void *data)
 {
-	//TODO
+	for (typename std::vector<AType>::size_type sz = 0;
+		sz != atoms.size(); ++sz)
+	{
+		atoms[sz].initialize(fun, data);
+	}
 }
 
 /*---------------------------------------------------------------------------*/
