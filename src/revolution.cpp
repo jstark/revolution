@@ -4,6 +4,7 @@
 #include "basic_es.h"
 #include <cstdio>
 #include <cstdlib>
+#include <limits>
 
 using revolution::Version;
 using revolution::ObjectiveFunction;
@@ -86,6 +87,7 @@ RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int la
 	{
 		wrapper = CONSTRUCT_POD_OBJECT(RVBasicEvolutionStrategy);
 		SET_WRAPPED_OBJECT(wrapper, es);
+		es->setWrapperObject(wrapper);
 	}
 	return wrapper;
 }
@@ -113,6 +115,41 @@ void RVBasicEvolutionStrategyStart(RVBasicEvolutionStrategy *es)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
+void RVBasicEvolutionStrategyOnGenerationFinished(RVBasicEvolutionStrategy *es, RVGenerationFinished fun, void *data)
+{
+	if (es)
+	{
+		BasicEs *b = GET_WRAPPED_OBJECT(es);
+		b->setOnGenerationFinished(fun, data);
+	}
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+double RVBasicEvolutionStrategyGetDesignParameter(RVBasicEvolutionStrategy *es, int parent, int paramIndex)
+{
+	if (es)
+	{
+		BasicEs *b = GET_WRAPPED_OBJECT(es);
+		return b->getDesignParameter(parent, paramIndex);
+	}
+	return std::numeric_limits<double>::max();
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+double RVBasicEvolutionStrategyGetObjective(RVBasicEvolutionStrategy *es, int parent, int objIndex)
+{
+	if (es)
+	{
+		BasicEs *b = GET_WRAPPED_OBJECT(es);
+		return b->getObjective(parent, objIndex);
+	}
+	return std::numeric_limits<double>::max();
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
 void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es)
 {
 	if (es)
@@ -122,3 +159,4 @@ void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es)
 		FREE_POD_OBJECT(es);
 	}
 }
+

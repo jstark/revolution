@@ -87,7 +87,7 @@ DLL_PUBLIC RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int 
 /*! \fn RVPopulationSetInitialValues
  *  \brief A function that calculates the initial population values. 
  */
-typedef double (*RVPopulationSetInitialValues)(int atom, int variable, void *data);
+typedef void (*RVPopulationSetInitialValues)(double *params, double *objectives, void *data);
 
 /* \fn void RVBasicEvolutionStrategyPopulationSetInitialValues(RVBasicEvolutionStrategy *es, RVSetPopulationInitialValues fun);
  * \brief Sets a function that will be called to calculate the initial values of the population. 
@@ -98,6 +98,16 @@ DLL_PUBLIC void RVBasicEvolutionStrategyInitializePopulation(RVBasicEvolutionStr
  * \brief Starts an evolution strategy
  */
 DLL_PUBLIC void RVBasicEvolutionStrategyStart(RVBasicEvolutionStrategy *es);
+
+typedef void (*RVGenerationFinished)(RVBasicEvolutionStrategy *es, int gen, void *data);
+
+/* \fn void RVBasicEvolutionOnGenerationFinished(RVBasicEvolutionStrategy *es, RVGenerationFinished fun, void *data);
+ * \brief Starts an evolution strategy
+ */
+DLL_PUBLIC void RVBasicEvolutionStrategyOnGenerationFinished(RVBasicEvolutionStrategy *es, RVGenerationFinished fun, void *data);
+
+DLL_PUBLIC double RVBasicEvolutionStrategyGetDesignParameter(RVBasicEvolutionStrategy *es, int parent, int paramIndex);
+DLL_PUBLIC double RVBasicEvolutionStrategyGetObjective(RVBasicEvolutionStrategy *es, int parent, int objIndex);
 
 /*! \fn void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es);
  *  \brief Destroys an RVBasicEvolutionStrategy objects and frees memory.
