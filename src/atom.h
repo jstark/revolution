@@ -4,8 +4,12 @@
 #include <vector>
 #include "revolution.h"
 
+
 namespace revolution
 {
+
+class ObjectiveFunction;
+
 class DLL_HIDDEN Atom
 {
 public:
@@ -14,11 +18,14 @@ public:
 	double operator[](int index) const;
 	double& operator[](int index);
 
-	void eval(RVObjectiveEvalFun fun);
+	void eval(const ObjectiveFunction& fun);
 	double f(int index) const;
 
 	int dim() const;
 	int obj() const;
+
+	void swap(Atom& rhs);
+	void initialize(RVPopulationSetInitialValues fun, void *data);
 
 private:
 	std::vector<double> params;

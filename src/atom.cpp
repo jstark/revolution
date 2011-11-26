@@ -1,4 +1,5 @@
 #include "atom.h"
+#include "objective_function.h"
 #include <limits>
 
 using revolution::Atom;
@@ -27,9 +28,9 @@ double& Atom::operator[](int index)
 }
 
 /*---------------------------------------------------------------------------*/
-void Atom::eval(RVObjectiveEvalFun fun)
+void Atom::eval(const revolution::ObjectiveFunction& fun)
 {
-	fun(&params[0], &objectives[0]);
+	fun.eval(&params[0], &objectives[0]);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -49,3 +50,20 @@ int Atom::obj() const
 {
 	return objectives.size();
 }
+
+/*---------------------------------------------------------------------------*/
+void Atom::swap(Atom& rhs)
+{
+	params.swap(rhs.params);
+	objectives.swap(rhs.objectives);
+}
+
+/*---------------------------------------------------------------------------*/
+void Atom::initialize(RVPopulationSetInitialValues fun, void *data)
+{
+	if (fun)
+	{
+		fun(&params[0], &objectives[0], data);
+	}
+}
+
