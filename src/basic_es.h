@@ -14,7 +14,11 @@ namespace revolution
 
 		~BasicEs();
 		void setPopulationInitialValues(RVPopulationSetInitialValues fun, void *data);
+		void setOnGenerationFinished(RVGenerationFinished fun, void *data);
 		void start();
+		double getDesignParameter(int parent, int paramIndex) const;
+		double getObjective(int parent, int objIndex) const;
+		void setWrapperObject(RVBasicEvolutionStrategy *obj);
 	private:
 		BasicEs(int mu, int rho, int lambda, RVSelectionMode mode, ObjectiveFunction *objf);
 		BasicEs(const BasicEs& rhs); // not implemented

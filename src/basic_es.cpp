@@ -29,8 +29,8 @@ double normal_dist_num()
 		return cached;
 	}
 
-	double U = rand() % RAND_MAX;
-	double V = rand() % RAND_MAX;
+	double U = rand() / (1.0 * RAND_MAX);
+	double V = rand() / (1.0 * RAND_MAX);
 	double X = sqrt(-2.0 * log(U)) * cos(2.0 * PI * V);
 	double Y = sqrt(-2.0 * log(U)) * sin(2.0 * PI * V);
 
@@ -44,7 +44,7 @@ class Atom : private revolution::Atom
 {
 public:
 	explicit Atom(int n, int m)
-		: revolution::Atom(n, m), strParams(n, 0)
+		: revolution::Atom(n, m), strParams(n, 1.0)
 	{
 
 	}
@@ -53,6 +53,8 @@ public:
 	using revolution::Atom::f;
 	using revolution::Atom::dim;
 	using revolution::Atom::obj;
+	using revolution::Atom::initialize;
+	using revolution::Atom::eval;
 
 	double strategyParam(int index) const 
 	{
@@ -62,6 +64,12 @@ public:
 	void setStrategyParam(int index, double value)
 	{
 		strParams[index] = value;
+	}
+
+	void swap(Atom& rhs)
+	{
+		revolution::Atom::swap(rhs);
+		strParams.swap(rhs.strParams);
 	}
 
 private:
@@ -193,7 +201,10 @@ public:
 		  selection(mode), 
 		  objectiveFunction(objf), 
 		  mu(m), lambda(l),
-		  temp(objf->dim(), objf->objectives())
+		  temp(objf->dim(), objf->objectives()),
+		  onGenFinished(0),
+		  onGenFinishedData(0),
+		  wrapperObj(0)
 	{
 		set_ref();
 	}
@@ -203,13 +214,25 @@ public:
 		initialize(fun, data);
 	}
 
+	void setOnGenerationFinished(RVGenerationFinished fun, void *data)
+	{
+		onGenFinished = fun;
+		onGenFinishedData = data;
+	}
+
 	void start()
 	{
 		const int MAX_GEN = 100;
 		for (int i = 0; i < MAX_GEN; ++i)
 		{
 			doEvolutionStep();
+			if (onGenFinished) onGenFinished(wrapperObj, i+1, onGenFinishedData);
 		}
+	}
+
+	double getDesignParameter(int parent, int paramIndex) const
+	{
+		return atom_ref[parent]->operator[](paramIndex);
 	}
 
 	void doEvolutionStep()
@@ -218,8 +241,20 @@ public:
 		{
 			recombination.apply(atom_ref, temp);			
 			mutation.apply(temp);
-			selection.apply(atom_ref, mu, lambda);
+			temp.eval(*objectiveFunction);
+			atom_ref[mu+i]->swap(temp);
 		}
+		selection.apply(atom_ref, mu, lambda);
+	}
+
+	double getObjective(int parent, int objIndex) const
+	{
+		return atom_ref[parent]->f(objIndex);
+	}
+
+	void setWrapperObject(RVBasicEvolutionStrategy *obj)
+	{
+		wrapperObj = obj;
 	}
 
 	void set_ref()
@@ -235,6 +270,9 @@ public:
 	ObjectiveFunction *objectiveFunction;
 	const int mu;
 	const int lambda;
+	RVGenerationFinished onGenFinished;
+	void *onGenFinishedData;
+	RVBasicEvolutionStrategy *wrapperObj;
 };//~BasicEs::BasicEsPriv
 
 /*---------------------------------------------------------------------------*/
@@ -261,6 +299,30 @@ void BasicEs::setPopulationInitialValues(RVPopulationSetInitialValues fun, void 
 void BasicEs::start()
 {
 	impl->start();
+}
+
+/*--------------------------------------------------------------------------*/
+void BasicEs::setOnGenerationFinished(RVGenerationFinished fun, void *data)
+{
+	impl->setOnGenerationFinished(fun, data);
+}
+
+/*--------------------------------------------------------------------------*/
+double BasicEs::getDesignParameter(int parent, int paramIndex) const
+{
+	return impl->getDesignParameter(parent, paramIndex);
+}
+
+/*--------------------------------------------------------------------------*/
+double BasicEs::getObjective(int parent, int objIndex) const
+{
+	return impl->getObjective(parent, objIndex);
+}
+
+/*--------------------------------------------------------------------------*/
+void BasicEs::setWrapperObject(RVBasicEvolutionStrategy *obj)
+{
+	impl->setWrapperObject(obj);
 }
 
 /*--------------------------------------------------------------------------*/
