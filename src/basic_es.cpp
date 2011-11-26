@@ -179,7 +179,12 @@ public:
 				pop.begin(), pop.begin()+mu, pop.end(), cmp_single_obj);
 		} else if (mode == kRVSelectionModeComma)
 		{
-			abort();
+            std::partial_sort(pop.begin()+mu, pop.begin()+mu+mu, pop.end(), cmp_single_obj);
+            for (std::vector<Atom *>::size_type sz = mu, i = 0;
+                sz != 2*mu; ++sz, ++i)
+            {
+                std::swap(pop[i], pop[sz]);
+            }
 		}
 	}
 
@@ -222,7 +227,7 @@ public:
 
 	void start()
 	{
-		const int MAX_GEN = 100;
+		const int MAX_GEN = 1000;
 		for (int i = 0; i < MAX_GEN; ++i)
 		{
 			doEvolutionStep();
