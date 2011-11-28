@@ -8,17 +8,17 @@ namespace revolution
 	class DLL_HIDDEN ObjectiveFunction
 	{
 	public:
-			const int dim() const;
-			const int objectives() const;
+			const unsigned int dim() const;
+			const unsigned int objectives() const;
 			void eval(const double *dv, double *obj) const;
 
-			static ObjectiveFunction* create(int dim, int objs, RVObjectiveEvalFun fun);
+			static ObjectiveFunction* create(unsigned int dim, unsigned int objs, RVObjectiveEvalFun fun);
 	private:
-			ObjectiveFunction(int dim, int obj, RVObjectiveEvalFun fun);
+			ObjectiveFunction(unsigned int dim, unsigned int obj, RVObjectiveEvalFun fun);
 			ObjectiveFunction(const ObjectiveFunction& rhs); // not implemented
 			ObjectiveFunction& operator=(const ObjectiveFunction& rhs); // not implemented
-			int dimensionality;
-			int objectivesNumber;
+			unsigned int dimensionality;
+			unsigned int objectivesNumber;
 			RVObjectiveEvalFun evalf;
 	};//~ ObjectiveFunction
 }//~revolution

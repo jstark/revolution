@@ -8,6 +8,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#include <functional>
 
 using revolution::BasicEs;
 using revolution::ObjectiveFunction;
@@ -91,7 +92,7 @@ public:
 };//~ BasicEs::Population
 
 /*--------------------------------------------------------------------------*/
-void gen_random_indices(int max, std::set<int>& indices)
+void gen_random_indices(unsigned int max, std::set<int>& indices)
 {
 	while (indices.size() != max)
 	{
@@ -171,7 +172,7 @@ public:
 	explicit Selection(RVSelectionMode md) 
 		: mode(md) {}
 
-	void apply(std::vector<Atom *>& pop, int mu, int lambda) const
+	void apply(std::vector<Atom *>& pop, unsigned int mu, unsigned int lambda) const
 	{
 		if (mode == kRVSelectionModePlus)
 		{
@@ -198,15 +199,15 @@ private:
 class BasicEs::BasicEsPriv : private ::Population
 {
 public:
-	BasicEsPriv(int m, int r, int l, RVSelectionMode mode, ObjectiveFunction *objf)
+	BasicEsPriv(unsigned int m, unsigned int r, unsigned int l, RVSelectionMode mode, ObjectiveFunction *objf)
 		: 
 		  ::Population(m, l, objf->dim(), objf->objectives()), 
+		  temp(objf->dim(), objf->objectives()),
 		  recombination(r, objf->dim()),
-		  mutation(),
 		  selection(mode), 
+		  mutation(),
 		  objectiveFunction(objf), 
 		  mu(m), lambda(l),
-		  temp(objf->dim(), objf->objectives()),
 		  onGenFinished(0),
 		  onGenFinishedData(0),
 		  wrapperObj(0)
@@ -217,6 +218,10 @@ public:
 	void setPopulationInitialValues(RVPopulationSetInitialValues fun, void *data)
 	{
 		initialize(fun, data);
+        for (std::vector< ::Atom *>::size_type sz = 0; sz != mu; ++sz)
+        {
+            atom_ref[sz]->eval(*objectiveFunction);
+        }
 	}
 
 	void setOnGenerationFinished(RVGenerationFinished fun, void *data)
@@ -242,7 +247,7 @@ public:
 
 	void doEvolutionStep()
 	{
-		for (int i = 0; i < lambda; ++i)
+		for (unsigned int i = 0; i < lambda; ++i)
 		{
 			recombination.apply(atom_ref, temp);			
 			mutation.apply(temp);
@@ -273,8 +278,8 @@ public:
 	const ::Selection selection;
 	const ::Mutation mutation;
 	ObjectiveFunction *objectiveFunction;
-	const int mu;
-	const int lambda;
+	const unsigned int mu;
+	const unsigned int lambda;
 	RVGenerationFinished onGenFinished;
 	void *onGenFinishedData;
 	RVBasicEvolutionStrategy *wrapperObj;

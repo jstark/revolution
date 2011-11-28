@@ -4,20 +4,20 @@ using revolution::ObjectiveFunction;
 
 
 /*---------------------------------------------------------------------------*/
-ObjectiveFunction::ObjectiveFunction(int dim, int obj, RVObjectiveEvalFun fun)
+ObjectiveFunction::ObjectiveFunction(unsigned int dim, unsigned int obj, RVObjectiveEvalFun fun)
 		: dimensionality(dim), objectivesNumber(obj), evalf(fun)
 {
 
 }
 
 /*---------------------------------------------------------------------------*/
-const int ObjectiveFunction::dim() const
+const unsigned int ObjectiveFunction::dim() const
 {
 	return dimensionality;
 }
 
 /*---------------------------------------------------------------------------*/
-const int ObjectiveFunction::objectives() const
+const unsigned int ObjectiveFunction::objectives() const
 {
 	return objectivesNumber;
 }
@@ -29,7 +29,7 @@ void ObjectiveFunction::eval(const double *dv, double *obj) const
 }
 
 /*---------------------------------------------------------------------------*/
-ObjectiveFunction* ObjectiveFunction::create(int dim, int objs, RVObjectiveEvalFun fun)
+ObjectiveFunction* ObjectiveFunction::create(unsigned int dim, unsigned int objs, RVObjectiveEvalFun fun)
 {
 	ObjectiveFunction* objfun = 0;
 
