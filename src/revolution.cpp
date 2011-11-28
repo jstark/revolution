@@ -126,6 +126,17 @@ void RVBasicEvolutionStrategyOnGenerationFinished(RVBasicEvolutionStrategy *es, 
 
 /*---------------------------------------------------------------------------*/
 extern "C"
+void RVBasicEvolutionStrategySetTerminationCriteria(RVBasicEvolutionStrategy *es, RVEvolutionShouldTerminate fun, void *data)
+{
+    if (es)
+    {
+        BasicEs *b = GET_WRAPPED_OBJECT(es);
+        b->setTerminationCriteria(fun, data);
+    }
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
 double RVBasicEvolutionStrategyGetDesignParameter(RVBasicEvolutionStrategy *es, int parent, int paramIndex)
 {
 	if (es)

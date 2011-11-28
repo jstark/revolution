@@ -106,6 +106,13 @@ typedef void (*RVGenerationFinished)(RVBasicEvolutionStrategy *es, int gen, void
  */
 DLL_PUBLIC void RVBasicEvolutionStrategyOnGenerationFinished(RVBasicEvolutionStrategy *es, RVGenerationFinished fun, void *data);
 
+typedef int (*RVEvolutionShouldTerminate)(RVBasicEvolutionStrategy *es, unsigned int g, void *data);
+
+/* \fn void RVBasicEvolutionStrategySetTerminationCriteria(RVBasicEvolutionStrategy *es, RVEvolutionShouldTerminate fun, void *data);
+ * \brief Checks if an evolution should terminate.
+ */
+DLL_PUBLIC void RVBasicEvolutionStrategySetTerminationCriteria(RVBasicEvolutionStrategy *es, RVEvolutionShouldTerminate fun, void *data);
+
 DLL_PUBLIC double RVBasicEvolutionStrategyGetDesignParameter(RVBasicEvolutionStrategy *es, int parent, int paramIndex);
 DLL_PUBLIC double RVBasicEvolutionStrategyGetObjective(RVBasicEvolutionStrategy *es, int parent, int objIndex);
 

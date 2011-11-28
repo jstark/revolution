@@ -210,6 +210,8 @@ public:
 		  mu(m), lambda(l),
 		  onGenFinished(0),
 		  onGenFinishedData(0),
+          evolutionShouldTerminate(0),
+          evolutionShouldTerminateData(0),
 		  wrapperObj(0)
 	{
 		set_ref();
@@ -230,13 +232,38 @@ public:
 		onGenFinishedData = data;
 	}
 
+	void setEvolutionShouldTerminate(RVEvolutionShouldTerminate fun, void *data)
+	{
+		evolutionShouldTerminate = fun;
+		evolutionShouldTerminateData = data;
+	}
+
 	void start()
 	{
-		const int MAX_GEN = 1000;
-		for (int i = 0; i < MAX_GEN; ++i)
+        static const unsigned int MAX_GEN = 1000;
+
+        unsigned int g = 0;
+        while (true)
 		{
 			doEvolutionStep();
-			if (onGenFinished) onGenFinished(wrapperObj, i+1, onGenFinishedData);
+            ++g;
+
+			if (onGenFinished) 
+            {
+                onGenFinished(wrapperObj, g, onGenFinishedData);
+            }
+
+            if (evolutionShouldTerminate) 
+            {
+                int terminate = evolutionShouldTerminate(wrapperObj, g, evolutionShouldTerminateData);
+                if (terminate)
+                {
+                    break;
+                }
+            } else if (g == MAX_GEN)
+            {
+                break;
+            }
 		}
 	}
 
@@ -282,6 +309,8 @@ public:
 	const unsigned int lambda;
 	RVGenerationFinished onGenFinished;
 	void *onGenFinishedData;
+	RVEvolutionShouldTerminate evolutionShouldTerminate;
+	void *evolutionShouldTerminateData;
 	RVBasicEvolutionStrategy *wrapperObj;
 };//~BasicEs::BasicEsPriv
 
@@ -315,6 +344,12 @@ void BasicEs::start()
 void BasicEs::setOnGenerationFinished(RVGenerationFinished fun, void *data)
 {
 	impl->setOnGenerationFinished(fun, data);
+}
+
+/*--------------------------------------------------------------------------*/
+void BasicEs::setTerminationCriteria(RVEvolutionShouldTerminate fun, void *data)
+{
+	impl->setEvolutionShouldTerminate(fun, data);
 }
 
 /*--------------------------------------------------------------------------*/
