@@ -19,7 +19,7 @@ namespace
 
 const double PI = 3.14159265;
 
-double normal_dist_num()
+double normal_dist_num(void *data)
 {
 	static bool cache = false;
 	static double cached = 0;
@@ -139,23 +139,44 @@ private:
 class Mutation
 {
 public:
+	Mutation()
+	{
+		setRNG(0, 0);
+	}
+
+	void setRNG(RVRandom f, void *d)
+	{
+		if (f)
+		{
+			rng = f;
+			data = d;
+		} else
+		{
+			rng = normal_dist_num;
+			data = 0;
+		}
+	}
+
 	void apply(Atom& temp) const
 	{
 		static const int n = temp.dim();
 		static const double t0= 1.0/(2.0 * sqrt(1.0*n));
 		static const double t = 1.0/(sqrt(2.0 * sqrt(1.0*n)));
 
-		double m0 = exp(t0 * normal_dist_num());
+		double m0 = exp(t0 * rng(data));
 		double mi = 0;
 		for (int varIndex = 0; varIndex != n; ++varIndex)
 		{
 			mi = temp.strategyParam(varIndex);
-			mi *= exp(t*normal_dist_num());
+			mi *= exp(t*rng(data));
 			mi *= m0;
 			temp.setStrategyParam(varIndex, mi);
-			temp[varIndex] += mi * normal_dist_num();
+			temp[varIndex] += mi * rng(data);
 		}
 	}
+
+	RVRandom rng;
+	void *data;
 
 };//~ Mutation
 
@@ -205,7 +226,6 @@ public:
 		  temp(objf->dim(), objf->objectives()),
 		  recombination(r, objf->dim()),
 		  selection(mode), 
-		  mutation(),
 		  objectiveFunction(objf), 
 		  mu(m), lambda(l),
 		  onGenFinished(0),
@@ -294,6 +314,11 @@ public:
 		wrapperObj = obj;
 	}
 
+	void setRNG(RVRandom fun, void *data)
+	{
+		mutation.setRNG(fun, data);
+	}
+
 	void set_ref()
 	{
 		atom_ref = mem_ref();
@@ -303,7 +328,7 @@ public:
 	std::vector< ::Atom *> atom_ref;
 	const ::Recombination recombination;
 	const ::Selection selection;
-	const ::Mutation mutation;
+	Mutation mutation;
 	ObjectiveFunction *objectiveFunction;
 	const unsigned int mu;
 	const unsigned int lambda;
@@ -368,6 +393,12 @@ double BasicEs::getObjective(int parent, int objIndex) const
 void BasicEs::setWrapperObject(RVBasicEvolutionStrategy *obj)
 {
 	impl->setWrapperObject(obj);
+}
+
+/*--------------------------------------------------------------------------*/
+void BasicEs::setRNG(RVRandom fun, void *data)
+{
+	impl->setRNG(fun, data);
 }
 
 /*--------------------------------------------------------------------------*/
