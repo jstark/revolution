@@ -67,3 +67,11 @@ void Atom::initialize(RVPopulationSetInitialValues fun, void *data)
 	}
 }
 
+/*---------------------------------------------------------------------------*/
+void Atom::constrain(RVConstrainParam fun, void *data)
+{
+    if (fun)
+    {
+        fun(&params[0], data);
+    }
+}

@@ -9,6 +9,7 @@
 #include <set>
 #include <algorithm>
 #include <functional>
+#include <ctime>
 
 using revolution::BasicEs;
 using revolution::ObjectiveFunction;
@@ -23,6 +24,13 @@ double normal_dist_num(void *data)
 {
 	static bool cache = false;
 	static double cached = 0;
+    static bool seed = true;
+
+    if (seed)
+    {
+        seed = false;
+        srand(time(NULL));
+    }   
 
 	if (cache)
 	{
@@ -56,6 +64,7 @@ public:
 	using revolution::Atom::obj;
 	using revolution::Atom::initialize;
 	using revolution::Atom::eval;
+    using revolution::Atom::constrain;
 
 	double strategyParam(int index) const 
 	{
@@ -232,7 +241,9 @@ public:
 		  onGenFinishedData(0),
           evolutionShouldTerminate(0),
           evolutionShouldTerminateData(0),
-		  wrapperObj(0)
+		  wrapperObj(0),
+          varConstrain(0), 
+          varConstrainData(0)
 	{
 		set_ref();
 	}
@@ -242,6 +253,7 @@ public:
 		initialize(fun, data);
         for (std::vector< ::Atom *>::size_type sz = 0; sz != mu; ++sz)
         {
+            atom_ref[sz]->constrain(varConstrain, varConstrainData);
             atom_ref[sz]->eval(*objectiveFunction);
         }
 	}
@@ -298,6 +310,7 @@ public:
 		{
 			recombination.apply(atom_ref, temp);			
 			mutation.apply(temp);
+            temp.constrain(varConstrain, varConstrainData);
 			temp.eval(*objectiveFunction);
 			atom_ref[mu+i]->swap(temp);
 		}
@@ -319,6 +332,12 @@ public:
 		mutation.setRNG(fun, data);
 	}
 
+	void setParamConstraints(RVConstrainParam fun, void *data)
+	{
+        varConstrain = fun;
+        varConstrainData = data;
+	}
+
 	void set_ref()
 	{
 		atom_ref = mem_ref();
@@ -337,6 +356,8 @@ public:
 	RVEvolutionShouldTerminate evolutionShouldTerminate;
 	void *evolutionShouldTerminateData;
 	RVBasicEvolutionStrategy *wrapperObj;
+    RVConstrainParam varConstrain;
+    void *varConstrainData;
 };//~BasicEs::BasicEsPriv
 
 /*---------------------------------------------------------------------------*/
@@ -399,6 +420,12 @@ void BasicEs::setWrapperObject(RVBasicEvolutionStrategy *obj)
 void BasicEs::setRNG(RVRandom fun, void *data)
 {
 	impl->setRNG(fun, data);
+}
+
+/*--------------------------------------------------------------------------*/
+void BasicEs::setParamConstraints(RVConstrainParam fun, void *data)
+{
+    impl->setParamConstraints(fun, data);
 }
 
 /*--------------------------------------------------------------------------*/

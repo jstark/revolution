@@ -19,8 +19,9 @@ namespace revolution
 		double getDesignParameter(int parent, int paramIndex) const;
 		double getObjective(int parent, int objIndex) const;
 		void setWrapperObject(RVBasicEvolutionStrategy *obj);
-        	void setTerminationCriteria(RVEvolutionShouldTerminate fun, void *data);
+       	void setTerminationCriteria(RVEvolutionShouldTerminate fun, void *data);
 		void setRNG(RVRandom fun, void *data);
+        void setParamConstraints(RVConstrainParam fun, void *data);
 	private:
 		BasicEs(int mu, int rho, int lambda, RVSelectionMode mode, ObjectiveFunction *objf);
 		BasicEs(const BasicEs& rhs); // not implemented

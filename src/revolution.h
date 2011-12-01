@@ -94,6 +94,10 @@ typedef void (*RVPopulationSetInitialValues)(double *params, double *objectives,
  */
 DLL_PUBLIC void RVBasicEvolutionStrategyInitializePopulation(RVBasicEvolutionStrategy *es, RVPopulationSetInitialValues fun, void *data);
 
+typedef void (*RVConstrainParam)(double *designParam, void *data);
+
+DLL_PUBLIC void RVBasicEvolutionStrategySetParameterConstraints(RVBasicEvolutionStrategy *es, RVConstrainParam fun, void *data);
+
 /* \fn void RVBasicEvolutionStrategyStart(RVBasicEvolutionStrategy *es);
  * \brief Starts an evolution strategy
  */

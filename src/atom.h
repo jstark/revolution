@@ -20,6 +20,7 @@ public:
 
 	void eval(const ObjectiveFunction& fun);
 	double f(int index) const;
+    void constrain(RVConstrainParam fun, void *data);
 
 	int dim() const;
 	int obj() const;

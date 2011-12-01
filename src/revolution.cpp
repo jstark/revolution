@@ -104,6 +104,17 @@ void RVBasicEvolutionStrategyInitializePopulation(RVBasicEvolutionStrategy *es, 
 
 /*---------------------------------------------------------------------------*/
 extern "C"
+void RVBasicEvolutionStrategySetParameterConstraints(RVBasicEvolutionStrategy *es, RVConstrainParam fun, void *data)
+{
+    if (es)
+    {
+        BasicEs *basic = GET_WRAPPED_OBJECT(es);
+        basic->setParamConstraints(fun, data);
+    }
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
 void RVBasicEvolutionStrategyStart(RVBasicEvolutionStrategy *es)
 {
 	if (es)
