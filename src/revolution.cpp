@@ -161,6 +161,17 @@ double RVBasicEvolutionStrategyGetObjective(RVBasicEvolutionStrategy *es, int pa
 
 /*---------------------------------------------------------------------------*/
 extern "C"
+void RVBasicEvolutionStrategySetRNG(RVBasicEvolutionStrategy *es, RVRandom fun, void *data)
+{
+	if (es)
+	{
+		BasicEs *b = GET_WRAPPED_OBJECT(es);
+		b->setRNG(fun, data);
+	}
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
 void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es)
 {
 	if (es)

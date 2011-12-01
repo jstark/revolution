@@ -116,6 +116,10 @@ DLL_PUBLIC void RVBasicEvolutionStrategySetTerminationCriteria(RVBasicEvolutionS
 DLL_PUBLIC double RVBasicEvolutionStrategyGetDesignParameter(RVBasicEvolutionStrategy *es, int parent, int paramIndex);
 DLL_PUBLIC double RVBasicEvolutionStrategyGetObjective(RVBasicEvolutionStrategy *es, int parent, int objIndex);
 
+typedef double (*RVRandom)(void *data);
+
+DLL_PUBLIC void RVBasicEvolutionStrategySetRNG(RVBasicEvolutionStrategy *es, RVRandom fun, void *data);
+
 /*! \fn void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es);
  *  \brief Destroys an RVBasicEvolutionStrategy objects and frees memory.
  */

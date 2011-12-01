@@ -1,3 +1,6 @@
+[28 November 2011]
+"Revolution" has reached version 1.0.0a. Although the most powerful algorithms have yet to be implemented, you can try optimizing any function you can think of.The current version supports single-threaded execution only, and a basic adaptive evolution strategy. No support for multi-objective problems yet.  
+
 [15 October 2011]
 "Revolution" is (will be) an API for optimization of single & multi-objective real-valued functions. The API will be written in C++. The main
 features of the API will be:
