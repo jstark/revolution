@@ -1,169 +1,359 @@
 #include "revolution.h"
 #include <cstdio>
 #include <cmath>
+#include <cstdlib>
 
-#define MU          100 
-#define RHO         1 
-#define LAMBDA      100
-#define OBJECTIVES  1
-#define DIM         9
+/*
+#define GEN         1000
+#define MU          10 
+#define LAMBDA      10
 #define SELECTION   kRVSelectionModeComma
-#define GEN         100
+#define RHO         1 
+*/
+#define OBJECTIVES  1
+#define DIM         4 /*8*/
 
 #define POINTS      DIM 
 
 struct Point
 {
-    double x, y, mass;
+	double x, y, z, mass;
 };
 
 static Point PARTICLES[POINTS];
 
 static void Particles_Initialize()
 {
-    PARTICLES[0].x = -2.0;
-    PARTICLES[0].y = -2.0;
-    PARTICLES[0].mass = 1;
-    PARTICLES[1].x = -1.0;
-    PARTICLES[1].y = -1.0;
-    PARTICLES[1].mass = 1;
-    PARTICLES[2].x =  0.0;
-    PARTICLES[2].y =  0.0;
-    PARTICLES[2].mass = 1;
-    PARTICLES[3].x =  1.0;
-    PARTICLES[3].y =  1.0;
-    PARTICLES[3].mass = 1;
-    PARTICLES[4].x =  2.0;
-    PARTICLES[4].y =  2.0;
-    PARTICLES[4].mass = 1;
-    PARTICLES[5].x = -2.0;
-    PARTICLES[5].y =  2.0;
-    PARTICLES[5].mass = 1;
-    PARTICLES[6].x = -1.0;
-    PARTICLES[6].y =  1.0;
-    PARTICLES[6].mass = 1;
-    PARTICLES[7].x =  1.0;
-    PARTICLES[7].y = -1.0;
-    PARTICLES[7].mass = 1;
-    PARTICLES[8].x =  2.0;
-    PARTICLES[8].y = -2.0;
-    PARTICLES[8].mass = 1;
+#if 0
+	PARTICLES[0].x = 2494.589624;
+	PARTICLES[0].y = -563.114551;
+	PARTICLES[0].z = 1613.935078;
+	PARTICLES[0].mass = 3.226921;
+	PARTICLES[1].x = 2516.245887;
+	PARTICLES[1].y =  578.829788;
+	PARTICLES[1].z = 1620.153061;
+	PARTICLES[1].mass = 3.226921;
+	PARTICLES[2].x = 3839.006113;
+	PARTICLES[2].y =  786.027381;
+	PARTICLES[2].z =  662.190941;
+	PARTICLES[2].mass = 3.784319;
+	PARTICLES[3].x = 3983.270739;
+	PARTICLES[3].y =  624.978937;
+	PARTICLES[3].z = 1600.816521;
+	PARTICLES[3].mass = 2.345191;
+	PARTICLES[4].x = 1911.002302;
+	PARTICLES[4].y = -778.012074;
+	PARTICLES[4].z =  612.784773;
+	PARTICLES[4].mass = 7.267111;
+	PARTICLES[5].x = 4015.657710;
+	PARTICLES[5].y = -628.133786;
+	PARTICLES[5].z = 1589.003620;
+	PARTICLES[5].mass = 2.355893;
+	PARTICLES[6].x = 1819.511896;
+	PARTICLES[6].y =  768.800124;
+	PARTICLES[6].z =  590.885146;
+	PARTICLES[6].mass = 2.837796;
+	PARTICLES[7].x = 3798.390368;
+	PARTICLES[7].y = -758.717933;
+	PARTICLES[7].z =  603.615460;
+	PARTICLES[7].mass = 5.731926;
+#endif
+	PARTICLES[0].x = 1.;
+	PARTICLES[0].y = 1.;
+	PARTICLES[0].z = 0.;
+	PARTICLES[0].mass = 1.0;
+	PARTICLES[1].x = -1.;
+	PARTICLES[1].y = -1.;
+	PARTICLES[1].z = 0.;
+	PARTICLES[1].mass = 1.0;
+	PARTICLES[2].x = -1.;
+	PARTICLES[2].y = 1.;
+	PARTICLES[2].z = 0.;
+	PARTICLES[2].mass = 1.0;
+	PARTICLES[3].x = 1.;
+	PARTICLES[3].y = -1.;
+	PARTICLES[3].z = 0.;
+	PARTICLES[3].mass = 1.0;
 }
 
-static Point INITIAL_COG;
+//static Point INITIAL_COG = { 2696.883209, 6.658567, 782.316552, -1};
+//static Point DESIRED_COG = { 2700.000000, 7.000000, 783.900000, -1 };
+static Point DESIRED_COG = { 0.5, 0.5, 0, -1}; //{ 2696.883209, 6.658567, 782.316552, -1};
+static Point INITIAL_COG = { 0, 0  , 0, -1}; //{ 2691.378, 18.831, 779.921, -1 };
+//static double INITIAL_MASS= 1304.114579;
+//static double DESIRED_MASS= 1334.114579;
+static double INITIAL_MASS= 4;//1286.285;
+static double DESIRED_MASS= 8;//1304.114579;
+static double MASS_TO_ADD = DESIRED_MASS - INITIAL_MASS;
+static double MT = INITIAL_MASS;
+static double MX = INITIAL_COG.x * MT;
+static double MY = INITIAL_COG.y * MT;
+static double MZ = INITIAL_COG.z * MT;
 
-static void Initialize_Cog()
+#if 0
+static double MASS_HI_BOUNDS[DIM] = {
+	6.458054, 
+	4.865722, 
+	7.573578, 
+	4.693444, 
+	14.543709, 
+	4.714861, 
+	5.679297, 
+	11.471335
+};
+#endif
+
+static double MASS_HI_BOUNDS[DIM] = {4,4,4,4}; /*{
+	3.838,
+	2.891,
+	8.643,
+	3.375,
+	4.501,
+	2.789,
+	2.802,
+	6.817
+};*/
+
+static void Calculate_Cog(const double *masses, Point* cog)
 {
-    double Mtotal = 0.0;
-    double M_times_X = 0.0;
-    double M_times_Y = 0.0;
-    for (int i = 0; i < DIM; ++i)
-    {
-        Mtotal += PARTICLES[i].mass;
-        M_times_X += PARTICLES[i].x * PARTICLES[i].mass;
-        M_times_Y += PARTICLES[i].y * PARTICLES[i].mass;
-    }
-
-    INITIAL_COG.x = M_times_X / Mtotal;
-    INITIAL_COG.y = M_times_Y / Mtotal;
-    INITIAL_COG.mass = Mtotal;
+	double sx = 0, sy = 0, sz = 0, sm = 0;
+	for (int i = 0; i < DIM; ++i)
+	{
+		sx += masses[i] * PARTICLES[i].x;
+		sy += masses[i] * PARTICLES[i].y;
+		sz += masses[i] * PARTICLES[i].z;
+		sm += masses[i];
+	}
+	
+	cog->x = (MX+sx)/(MT+sm);
+	cog->y = (MY+sy)/(MT+sm);
+	cog->z = (MZ+sz)/(MT+sm);
+	cog->mass = sm; // only added mass
 }
 
-static Point Calculate_Cog(const double *masses)
+struct InertiaTensor 
 {
-    Point cog = {0.0, 0.0, 0.0};
+	double Ixx, Iyy, Izz, Ixy, Ixz, Iyz;
+}; //~ InertiaTensor
 
-    double Mtotal = 0.0;
-    double M_times_X = 0.0;
-    double M_times_Y = 0.0;
-    for (int i = 0; i < DIM; ++i)
-    {
-        Mtotal += masses[i] + PARTICLES[i].mass;
-        M_times_X += PARTICLES[i].x * (masses[i] + PARTICLES[i].mass);
-        M_times_Y += PARTICLES[i].y * (masses[i] + PARTICLES[i].mass);
-    }
+static InertiaTensor INITIAL_TENSOR = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+static InertiaTensor DESIRED_TENSOR = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-    cog.x = M_times_X / Mtotal;
-    cog.y = M_times_Y / Mtotal;
-    cog.mass = Mtotal;
-    return cog;
-}
-
-static Point NEW_COG = { 0.5, 0.5, 20.0 };
-static double MASS_TO_ADD = 0;
-
-void Calculate_Mass_to_Add()
+void Calculate_InertiaTensor(const double *masses, InertiaTensor *tensor)
 {
-    MASS_TO_ADD = NEW_COG.mass - 9.0;
+	double ixx = 0, iyy = 0, izz = 0, ixy = 0, ixz = 0, iyz = 0;
+	for (int i = 0; i < DIM; ++i)
+	{
+		ixx += masses[i] * (PARTICLES[i].y * PARTICLES[i].y + PARTICLES[i].z * PARTICLES[i].z);
+		iyy += masses[i] * (PARTICLES[i].x * PARTICLES[i].x + PARTICLES[i].z * PARTICLES[i].z);
+		izz += masses[i] * (PARTICLES[i].x * PARTICLES[i].x + PARTICLES[i].y * PARTICLES[i].y);
+		ixy -= masses[i] * (PARTICLES[i].x * PARTICLES[i].y);
+		ixz -= masses[i] * (PARTICLES[i].x * PARTICLES[i].z);
+		iyz -= masses[i] * (PARTICLES[i].y * PARTICLES[i].z);
+	}	
+	tensor->Ixx = INITIAL_TENSOR.Ixx + ixx;
+	tensor->Iyy = INITIAL_TENSOR.Iyy + iyy;
+	tensor->Izz = INITIAL_TENSOR.Izz + izz;
+	tensor->Ixy = INITIAL_TENSOR.Ixy + ixy;
+	tensor->Ixz = INITIAL_TENSOR.Ixz + ixz;
+	tensor->Iyz = INITIAL_TENSOR.Iyz + iyz;
 }
+
+void Calculate_InitialInertiaTensor()
+{
+#if 0
+	INITIAL_TENSOR.Ixx = 4.92810E+008;
+	INITIAL_TENSOR.Iyy = 2.31120E+009;
+	INITIAL_TENSOR.Izz = 2.57308E+009;
+	INITIAL_TENSOR.Ixy =-8.60016E+006;
+	INITIAL_TENSOR.Ixz =-4.13845E+007;
+	INITIAL_TENSOR.Iyz = 3.23983E+006;
+
+	DESIRED_TENSOR.Ixx = 4.77328E+008;
+	DESIRED_TENSOR.Iyy = 2.30072E+009;
+	DESIRED_TENSOR.Izz = 2.55006E+009;
+	DESIRED_TENSOR.Ixy =-1.47839E+007;
+	DESIRED_TENSOR.Ixz =-3.96882E+007;
+	DESIRED_TENSOR.Iyz = 549598;
+
+	DESIRED_TENSOR.Ixx = 4.92810E+008;
+	DESIRED_TENSOR.Iyy = 2.31120E+009;
+	DESIRED_TENSOR.Izz = 2.57308E+009;
+	DESIRED_TENSOR.Ixy =-8.60016E+006;
+	DESIRED_TENSOR.Ixz =-4.13845E+007;
+	DESIRED_TENSOR.Iyz = 3.23983E+006;
+
+	INITIAL_TENSOR.Ixx = 4.77328E+008;
+	INITIAL_TENSOR.Iyy = 2.30072E+009;
+	INITIAL_TENSOR.Izz = 2.55006E+009;
+	INITIAL_TENSOR.Ixy =-1.47839E+007;
+	INITIAL_TENSOR.Ixz =-3.96882E+007;
+	INITIAL_TENSOR.Iyz = 549598;
+#endif
+	DESIRED_TENSOR.Ixx = 12;
+	DESIRED_TENSOR.Iyy = 12;
+	DESIRED_TENSOR.Izz = 24;
+	DESIRED_TENSOR.Ixy = -4;
+	DESIRED_TENSOR.Ixz =  0;
+	DESIRED_TENSOR.Iyz =  0;
+
+	INITIAL_TENSOR.Ixx = 8;
+	INITIAL_TENSOR.Iyy = 8;
+	INITIAL_TENSOR.Izz =16;
+	INITIAL_TENSOR.Ixy = 0;
+	INITIAL_TENSOR.Ixz = 0;
+	INITIAL_TENSOR.Iyz = 0;
+
+}
+
+double InertiaError(const InertiaTensor& t)
+{
+	double ixxerr = 0, iyyerr = 0, izzerr = 0, ixyerr = 0, ixzerr = 0, iyzerr = 0;
+
+	ixxerr = (t.Ixx - DESIRED_TENSOR.Ixx)/(DESIRED_TENSOR.Ixx);
+	iyyerr = (t.Iyy - DESIRED_TENSOR.Iyy)/(DESIRED_TENSOR.Iyy);
+	izzerr = (t.Izz - DESIRED_TENSOR.Izz)/(DESIRED_TENSOR.Izz);
+	ixyerr = (t.Ixy - DESIRED_TENSOR.Ixy)/(DESIRED_TENSOR.Ixy);
+	//ixzerr = (t.Ixz - DESIRED_TENSOR.Ixz)/(DESIRED_TENSOR.Ixz);
+	//iyzerr = (t.Iyz - DESIRED_TENSOR.Iyz)/(DESIRED_TENSOR.Iyz);
+
+	return ixxerr*ixxerr + iyyerr*iyyerr + izzerr*izzerr + ixyerr*ixyerr + ixzerr*ixzerr + iyzerr*iyzerr;
+}	
 
 double CogError(const Point& current)
 {
-    return (current.x-NEW_COG.x)*(current.x-NEW_COG.x)+(current.y-NEW_COG.y)*(current.y-NEW_COG.y);
-}
+	double xerr = 0, yerr = 0, zerr = 0;
 
-double PENALTY = 1000;
+	xerr = (current.x-DESIRED_COG.x)/DESIRED_COG.x;
+	yerr = (current.y-DESIRED_COG.y)/DESIRED_COG.y;
+	//zerr = (current.z-DESIRED_COG.z)/DESIRED_COG.z;
+
+	return xerr*xerr + yerr*yerr + zerr * zerr;
+}
 
 int evalf(const double *dv, double *obj)
 {
-    Point current_cog = Calculate_Cog(dv);
-    double actualDistance = 0.5*CogError(current_cog);
-    if (current_cog.mass > 1.01 * NEW_COG.mass) actualDistance += PENALTY + current_cog.mass * current_cog.mass;
-    if (current_cog.mass < 0.99 * NEW_COG.mass) actualDistance += PENALTY + current_cog.mass * current_cog.mass;
-    obj[0] = actualDistance;
+	Point new_cog = {0, 0, 0, 0};
+	obj[0] = 0;
+	Calculate_Cog(dv, &new_cog);
+	obj[0] = CogError(new_cog);
+
+	InertiaTensor it = {0, 0, 0, 0, 0, 0};
+	Calculate_InertiaTensor(dv, &it);
+	obj[0] = obj[0]+InertiaError(it);
+
+	if (new_cog.mass < 0.99 *MASS_TO_ADD || new_cog.mass > 1.01 * MASS_TO_ADD)
+	{
+		obj[0] += 1000 * (abs(new_cog.mass - DESIRED_MASS)) ;
+	}
 	return 0;
 }
 
 void printBest(RVBasicEvolutionStrategy *es, int gen, void *data)
 {
-#if 1
-    double added = 0.0;
-    printf("%d\t", gen);
-    for (int i = 0; i < DIM; ++i)
-    {
-        printf("%f ", RVBasicEvolutionStrategyGetDesignParameter(es, 0, i));
-        added += RVBasicEvolutionStrategyGetDesignParameter(es, 0, i);
-    }
-    printf(" (%f)\t%f", added, RVBasicEvolutionStrategyGetObjective(es, 0, 0));
-    printf("\n");
+#if 0
+	double added = 0.0;
+	double masses[DIM];
+	printf("%d\t", gen);
+	for (int i = 0; i < DIM; ++i)
+	{
+		printf("%f ", RVBasicEvolutionStrategyGetDesignParameter(es, 0, i));
+		masses[i] = RVBasicEvolutionStrategyGetDesignParameter(es, 0, i);
+		added += masses[i];
+	}
+	Point cog = {0, 0, 0, 0};
+	Calculate_Cog(masses, &cog);
+
+	InertiaTensor it = {0, 0, 0, 0, 0, 0};
+	Calculate_InertiaTensor(masses, &it);
+	printf(" (X = %f, Y = %f, Z = %f, Added %f mass, I #[ %g %g %g | %g %g %g ] {%f}", 
+			cog.x, cog.y, cog.z, added, 
+			it.Ixx, it.Iyy, it.Izz, it.Ixy, it.Ixz, it.Iyz, 
+			RVBasicEvolutionStrategyGetObjective(es, 0, 0));
+	printf("\n");
 #endif
 }
 
 void init(double *params, double *objectives, void *data)
 {
-    for (int i = 0; i < DIM; ++i)
-    {
-        params[i] = MASS_TO_ADD / DIM;
-    }
+	for (int i = 0; i < DIM; ++i)
+	{
+		params[i] = MASS_TO_ADD / DIM;
+	}
 }
+
+unsigned int GEN = 0;
 
 int shouldTerminate(RVBasicEvolutionStrategy *es, unsigned int g, void *data)
 {
-    if (g == GEN) return 1;
-    return 0;
+	if (g == GEN) 
+	{
+		printf("Solution:\n");
+		printf("------------------------------------------------\n");
+		double masses[DIM] = {0}, added = 0;
+		for (int i = 0; i < DIM; ++i)
+		{
+			masses[i] = RVBasicEvolutionStrategyGetDesignParameter(es, 0, i);
+			printf("M[%i] = %f, ", i, masses[i]);
+			added += masses[i];
+		}
+		printf("\nMass error = %.2f%%\n", (MASS_TO_ADD-added)/added * 100);
+	
+		Point c = {0, 0, 0, 0};
+		Calculate_Cog(masses, &c);	
+		printf("Target errors:\n");
+		printf("XG = %f\t\te = %f%%\n", c.x, (c.x-DESIRED_COG.x)/(DESIRED_COG.x)*100);
+		printf("YG = %f\t\te = %f%%\n", c.y, (c.y-DESIRED_COG.y)/(DESIRED_COG.y)*100);
+		printf("ZG = %f\t\te = %f%%\n", c.z, (c.z-DESIRED_COG.z)/(DESIRED_COG.z)*100);
+
+		InertiaTensor t = {0, 0, 0, 0, 0, 0};
+		Calculate_InertiaTensor(masses, &t);
+		printf("Ixx= %f\t\te = %f%%\n", t.Ixx, (t.Ixx-DESIRED_TENSOR.Ixx)/DESIRED_TENSOR.Ixx * 100);
+		printf("Iyy= %f\t\te = %f%%\n", t.Iyy, (t.Iyy-DESIRED_TENSOR.Iyy)/DESIRED_TENSOR.Iyy * 100);
+		printf("Izz= %f\t\te = %f%%\n", t.Izz, (t.Izz-DESIRED_TENSOR.Izz)/DESIRED_TENSOR.Izz * 100);
+		printf("Ixy= %f\t\te = %f%%\n", t.Ixy, fabs((t.Ixy-DESIRED_TENSOR.Ixy)/DESIRED_TENSOR.Ixy) * 100);
+		printf("Ixz= %f\t\te = %f%%\n", t.Ixz, fabs((t.Ixz-DESIRED_TENSOR.Ixz)/DESIRED_TENSOR.Ixz) * 100);
+		printf("Iyz= %f\t\te = %f%%\n", t.Iyz, fabs((t.Iyz-DESIRED_TENSOR.Iyz)/DESIRED_TENSOR.Iyz) * 100);
+
+		return 1;
+	}
+	return 0;
 }
 
 void constrainMasses(double *dv, void *data)
 {
-    for (int i = 0; i < DIM; ++i)
-    {
-        if (dv[i] < 0.0) dv[i] = 0.0;
-        if (dv[i] > 100.0) dv[i] = 100.0;
-    }
+	for (int i = 0; i < DIM; ++i)
+	{
+		if (dv[i] < 0.0) dv[i] = 0.0;
+		if (dv[i] > MASS_HI_BOUNDS[i]) dv[i] = MASS_HI_BOUNDS[i];
+	}
 }
 
 int main(int argc, char *argv[])
 {
-    Particles_Initialize();
-    Initialize_Cog();
-    Calculate_Mass_to_Add();
+
+	if (argc != 6) 
+	{
+		printf("usage: main mu lambda gen sel\n");
+		return 0;
+	}
+
+	int MU = atoi(argv[1]);
+	int RHO= atoi(argv[2]);
+	int LAMBDA = atoi(argv[3]);
+	GEN = atoi(argv[4]);
+	int sel = atoi(argv[5]);
+	RVSelectionMode SELECTION = sel ? kRVSelectionModeComma : kRVSelectionModePlus;
+
+	Particles_Initialize();
+	Calculate_InitialInertiaTensor();
 
 	RVObjectiveFunction *object = RVObjectiveFunctionCreate(DIM, OBJECTIVES, evalf);
 	RVBasicEvolutionStrategy *es = RVBasicEvolutionStrategyCreate(MU, RHO, LAMBDA, SELECTION, object);
 	RVBasicEvolutionStrategyInitializePopulation(es, init, 0);
-    RVBasicEvolutionStrategySetParameterConstraints(es, constrainMasses, 0);
+	RVBasicEvolutionStrategySetParameterConstraints(es, constrainMasses, 0);
 	RVBasicEvolutionStrategyOnGenerationFinished(es, printBest, 0);
-    RVBasicEvolutionStrategySetTerminationCriteria(es, shouldTerminate, 0);
+	RVBasicEvolutionStrategySetTerminationCriteria(es, shouldTerminate, 0);
 	RVBasicEvolutionStrategyStart(es);
 	RVBasicEvolutionStrategyDestroy(es);
 	RVObjectiveFunctionDestroy(object);
