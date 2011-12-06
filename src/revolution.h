@@ -128,6 +128,12 @@ DLL_PUBLIC void RVBasicEvolutionStrategySetRNG(RVBasicEvolutionStrategy *es, RVR
  *  \brief Destroys an RVBasicEvolutionStrategy objects and frees memory.
  */
 DLL_PUBLIC void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es);
+	
+/* CMA */
+struct RVCmaEvolutionStrategy;
+	
+DLL_PUBLIC RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, RVObjectiveFunction *fun); 
+DLL_PUBLIC void RVCmaEvolutionStrategyDestroy(RVCmaEvolutionStrategy *es);
 
 #ifdef __cplusplus
 }

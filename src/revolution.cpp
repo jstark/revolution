@@ -2,6 +2,7 @@
 #include "version.h"
 #include "objective_function.h"
 #include "basic_es.h"
+#include "cma_es.h"
 #include <cstdio>
 #include <cstdlib>
 #include <limits>
@@ -9,6 +10,7 @@
 using revolution::Version;
 using revolution::ObjectiveFunction;
 using revolution::BasicEs;
+using revolution::CmaEs;
 
 /*---------------------------------------------------------------------------*/
 
@@ -22,6 +24,7 @@ using revolution::BasicEs;
 
 DEFINE_POD_WRAPPER_STRUCT(RVObjectiveFunction, ObjectiveFunction)
 DEFINE_POD_WRAPPER_STRUCT(RVBasicEvolutionStrategy, BasicEs)
+DEFINE_POD_WRAPPER_STRUCT(RVCmaEvolutionStrategy, CmaEs)
 
 #define CONSTRUCT_POD_OBJECT(ClassName) \
 	static_cast<ClassName *>(std::calloc(1, sizeof(ClassName)))
@@ -189,6 +192,33 @@ void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es)
 	{
 		BasicEs *b = GET_WRAPPED_OBJECT(es);
 		delete b;
+		FREE_POD_OBJECT(es);
+	}
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, RVObjectiveFunction *fun)
+{
+	CmaEs *es = CmaEs::create(lambda, GET_WRAPPED_OBJECT(fun));
+	RVCmaEvolutionStrategy *wrapper = 0;
+	if (es)
+	{
+		wrapper = CONSTRUCT_POD_OBJECT(RVCmaEvolutionStrategy);
+		SET_WRAPPED_OBJECT(wrapper, es);
+		es->setWrapperObject(wrapper);
+	}
+	return wrapper;
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+void RVCmaEvolutionStrategyDestroy(RVCmaEvolutionStrategy *es)
+{
+	if (es)
+	{
+		CmaEs *cma_es = GET_WRAPPED_OBJECT(es);
+		delete cma_es;
 		FREE_POD_OBJECT(es);
 	}
 }
