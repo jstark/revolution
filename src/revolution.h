@@ -30,8 +30,8 @@
 	#endif
 #endif
 
-#define RV_API_MAJOR	0
-#define RV_API_MINOR	0
+#define RV_API_MAJOR	1
+#define RV_API_MINOR	1
 #define RV_API_PATCH	0
 
 #ifdef __cplusplus
