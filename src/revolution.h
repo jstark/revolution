@@ -132,8 +132,8 @@ DLL_PUBLIC void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es);
 /* CMA */
 struct RVCmaEvolutionStrategy;
 	
-DLL_PUBLIC RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, RVObjectiveFunction *fun); 
-DLL_PUBLIC void RVCmaEvolutionStrategyDestroy(RVCmaEvolutionStrategy *es);
+DLL_PUBLIC struct RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, RVObjectiveFunction *fun); 
+DLL_PUBLIC void RVCmaEvolutionStrategyDestroy(struct RVCmaEvolutionStrategy *es);
 
 #ifdef __cplusplus
 }
