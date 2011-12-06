@@ -12,6 +12,8 @@ SET (rev_src
 		atom.h
 		atom.cpp
 		population.h
+		cma_es.h
+		cma_es.cpp
 )
 
 add_library (revolution SHARED ${rev_src})
