@@ -272,7 +272,7 @@ double massViolation(const double *masses)
 	return err;
 }
 
-int evalf(const double *dv, double *obj)
+int evalf(const double *dv, double *obj, void *data)
 {
 	Point new_cog = {0, 0, 0, 0};
 	obj[0] = 0;
@@ -390,7 +390,7 @@ int main(int argc, char *argv[])
 	Particles_Initialize();
 	Calculate_InitialInertiaTensor();
 
-	RVObjectiveFunction *object = RVObjectiveFunctionCreate(DIM, OBJECTIVES, evalf);
+	RVObjectiveFunction *object = RVObjectiveFunctionCreate(DIM, OBJECTIVES, evalf, NULL);
 	RVBasicEvolutionStrategy *es = RVBasicEvolutionStrategyCreate(MU, RHO, LAMBDA, SELECTION, object);
 	RVBasicEvolutionStrategyInitializePopulation(es, init, 0);
 	RVBasicEvolutionStrategySetParameterConstraints(es, constrainMasses, 0);
