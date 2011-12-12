@@ -76,7 +76,7 @@ public:
 		strParams[index] = value;
 	}
 
-	void swap(::Atom& rhs)
+	void swap(Atom& rhs)
 	{
 		revolution::Atom::swap(rhs); //FIXME: slice
 		strParams.swap(rhs.strParams);
