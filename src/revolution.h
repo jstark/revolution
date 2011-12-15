@@ -142,7 +142,7 @@ DLL_PUBLIC struct RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int m
 /*! \typedef RVPopulationSetInitialValues
  *  \brief A function signature that calculates the initial population values. 
  *  \param params the design vector of a candidate solution.
- *  \param objectives a pointer to the objectives vector.
+ *  \param objectives a pointer to the objectives vector. You do not need change the objective values. The Objective function will be called automatically after the initialization function.
  *  \param data the user data that may or may not be supplied. These are the same user data used 
  *  during the creation of the RVObjectiveFunction object.  
  *  @see RVBasicEvolutionStrategyInitializePopulation(), RVObjectiveFunctionCreate()
