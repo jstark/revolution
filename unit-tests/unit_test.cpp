@@ -1,5 +1,6 @@
 #include "ut_atom.h"
 #include "ut_population.h"
+#include "ut_objective_function.h"
 #include "gtest/gtest.h"
 
 int main(int argc, char *argv[])
