@@ -1,3 +1,6 @@
+#ifndef REVOLUTION_UT_POPULATION_H_INCLUDED
+#define REVOLUTION_UT_POPULATION_H_INCLUDED
+
 #include "gtest/gtest.h"
 #include "population.h"
 #include "atom.h"
@@ -48,3 +51,5 @@ namespace
     }
 
 }//~ namespace
+
+#endif

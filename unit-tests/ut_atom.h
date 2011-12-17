@@ -1,3 +1,6 @@
+#ifndef REVOLUTION_UT_ATOM_H_INCLUDED
+#define REVOLUTION_UT_ATOM_H_INCLUDED
+
 #include "gtest/gtest.h"
 #include "atom.h"
 #include "objective_function.h"
@@ -99,3 +102,5 @@ namespace
     }
 
 }//~ namespace
+
+#endif
