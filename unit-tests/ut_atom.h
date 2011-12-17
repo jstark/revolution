@@ -84,4 +84,18 @@ namespace
         EXPECT_DOUBLE_EQ(a[2], 3.0) << "a[2] not initialized correctly!";
     }
 
+    TEST_F (AtomFixture, checkSwap)
+    {
+        revolution::Atom a1(3, 1), a2(3,1);
+        a1[0] = 2.0, a1[1] = 3.0, a1[2] = 4.0;
+        a1.swap(a2);
+
+        ASSERT_DOUBLE_EQ(a1[0], 0.0) << "a[0] is not 0!";
+        ASSERT_DOUBLE_EQ(a1[1], 0.0) << "a[1] is not 0!";
+        ASSERT_DOUBLE_EQ(a1[2], 0.0) << "a[2] is not 0!";
+        ASSERT_DOUBLE_EQ(a2[0], 2.0) << "a[0] is not 2!";
+        ASSERT_DOUBLE_EQ(a2[1], 3.0) << "a[1] is not 3!";
+        ASSERT_DOUBLE_EQ(a2[2], 4.0) << "a[2] is not 4!";
+    }
+
 }//~ namespace
