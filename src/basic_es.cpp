@@ -429,11 +429,17 @@ void BasicEs::setParamConstraints(RVConstrainParam fun, void *data)
 }
 
 /*--------------------------------------------------------------------------*/
-BasicEs* BasicEs::create(int mu, int rho, int lambda,RVSelectionMode mode, ObjectiveFunction *objf)
+static bool isValidMode(enum RVSelectionMode mode)
 {
-	bool invalidPopulation = mu < 0 || lambda < 0;
-	bool invalidRecombinationConstant = rho < 0 || rho > mu;
-	bool invalidSelectionMode = mode == kRVSelectionModeComma ? (lambda >= mu ? false : true) : false;
+    return (mode != kRVSelectionModeComma) && (mode != kRVSelectionModePlus);
+}
+
+/*--------------------------------------------------------------------------*/
+BasicEs* BasicEs::create(int mu, int rho, int lambda, enum RVSelectionMode mode, ObjectiveFunction *objf)
+{
+	bool invalidPopulation = (mu <= 0) || (lambda <= 0);
+	bool invalidRecombinationConstant = (rho <= 0) || rho > mu;
+	bool invalidSelectionMode = isValidMode(mode);
 
 	if (invalidPopulation || invalidRecombinationConstant || invalidSelectionMode)
 	{
