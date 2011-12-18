@@ -26,7 +26,7 @@ namespace
         revolution::Population<revolution::Atom> p(PARENTS, OFFSPRINGS, DIM, OBJ);
 
         std::vector<revolution::Atom *> v = p.mem_ref();
-        ASSERT_EQ(v.size(), PARENTS+OFFSPRINGS) << "Population size error!";
+        ASSERT_TRUE(v.size() == (PARENTS+OFFSPRINGS)) << "Population size error!";
 
         for (std::vector<revolution::Atom *>::size_type sz = 0;
                 sz != v.size(); ++sz)

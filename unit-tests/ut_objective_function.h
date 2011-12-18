@@ -42,8 +42,8 @@ namespace
 
         ref = revolution::ObjectiveFunction::create(5, 2, eval, 0);
         ASSERT_NE(ref, (void *)0) << "Did not initialize objective function with valid data";
-        ASSERT_EQ(ref->dim(), 5);
-        ASSERT_EQ(ref->objectives(), 2);
+        ASSERT_TRUE(ref->dim() == 5);
+        ASSERT_TRUE(ref->objectives() == 2);
 
         delete ref;
     }
