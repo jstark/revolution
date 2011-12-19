@@ -233,8 +233,8 @@ DLL_PUBLIC double RVBasicEvolutionStrategyGetDesignParameter(struct RVBasicEvolu
 
 /*! double RVBasicEvolutionStrategyGetObjective(struct RVBasicEvolutionStrategy *es, int parent, int objIndex);
  *  \brief Gets an objective value from a parent atom.
- *  \param es the pointer the basic evolution strategy whose parent atom we want to check. The function will check for a NULL  *  argument.
- *  \param parent the parent index which should be less than mu, for a (mu/rho,lambda) or (mu/rho+lambda) evolution strategy. The index is 0-ba *  sed, so use '0' for the first parent. 
+ *  \param es the pointer the basic evolution strategy whose parent atom we want to check. The function will check for a NULL  argument.
+ *  \param parent the parent index which should be less than mu, for a (mu/rho,lambda) or (mu/rho+lambda) evolution strategy. The index is 0-based, so use '0' for the first parent. 
  *  \param objIndex the 0-based objective index which must be less than m, the problem's number of objectives.
  *  \return Returns the value of the desired objective.
  */
