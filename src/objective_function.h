@@ -12,14 +12,15 @@ namespace revolution
 			const unsigned int objectives() const;
 			void eval(const double *dv, double *obj) const;
 
-			static ObjectiveFunction* create(unsigned int dim, unsigned int objs, RVObjectiveEvalFun fun);
+			static ObjectiveFunction* create(unsigned int dim, unsigned int objs, RVObjectiveEvalFun fun, void *data);
 	private:
-			ObjectiveFunction(unsigned int dim, unsigned int obj, RVObjectiveEvalFun fun);
+			ObjectiveFunction(unsigned int dim, unsigned int obj, RVObjectiveEvalFun fun, void *data);
 			ObjectiveFunction(const ObjectiveFunction& rhs); // not implemented
 			ObjectiveFunction& operator=(const ObjectiveFunction& rhs); // not implemented
 			unsigned int dimensionality;
 			unsigned int objectivesNumber;
 			RVObjectiveEvalFun evalf;
+            void *userData;
 	};//~ ObjectiveFunction
 }//~revolution
 

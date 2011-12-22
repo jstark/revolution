@@ -9,7 +9,7 @@
 #define DIM         2
 #define SELECTION kRVSelectionModePlus
 
-int himmelblau(const double *dv, double *obj)
+int himmelblau(const double *dv, double *obj, void *data)
 {
     double x = dv[0];
     double y = dv[1];
@@ -42,7 +42,7 @@ int shouldTerminate(RVBasicEvolutionStrategy *es, unsigned int g, void *data)
 
 int main(int argc, char *argv[])
 {
-	RVObjectiveFunction *object = RVObjectiveFunctionCreate(DIM, OBJECTIVES, himmelblau);
+	RVObjectiveFunction *object = RVObjectiveFunctionCreate(DIM, OBJECTIVES, himmelblau, NULL);
 	RVBasicEvolutionStrategy *es = RVBasicEvolutionStrategyCreate(MU, RHO, LAMBDA, SELECTION, object);
 	RVBasicEvolutionStrategyInitializePopulation(es, init, 0);
 	RVBasicEvolutionStrategyOnGenerationFinished(es, printBest, 0);

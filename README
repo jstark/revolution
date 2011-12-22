@@ -1,14 +1,50 @@
-[28 November 2011]
-"Revolution" has reached version 1.0.0a. Although the most powerful algorithms have yet to be implemented, you can try optimizing any function you can think of.The current version supports single-threaded execution only, and a basic adaptive evolution strategy. No support for multi-objective problems yet.  
+"Revolution" optimization framework
+===================================
+http://anvilofcode.wordpress.com
 
-[15 October 2011]
-"Revolution" is (will be) an API for optimization of single & multi-objective real-valued functions. The API will be written in C++. The main
-features of the API will be:
+Overview
+--------
+"Revolution" is a C/C++ optimization framework for single-objective functions and problems. The API uses a simple optimizer based on Evolution Strategies. The library uses a single header file (revolution.h) and can be used from C or C++.
 
-1. Run optimization tasks for single objective real-valued functions using adaptive evolution strategies like CMA-ES. 
-2. Combine evolution strategy algorithms with multi-objective genetic algorithms like NSGA-II & SPEA-2 to optimize 
-    real-valued multi-objective functions. 
+Example
+-------
+See test/ directory.
 
-The API will be written in ANSI C++.  I would like to keep things as simple as possible, and not use any third party library. However, a possible candidate 
-is Boost, since it offers a good RNG, and a way to expose functionality through python. It also offers code testing capabilities.  I haven't made up my mind 
-about the build system and the library license, though we will probably use cmake and a Boost compatible license. 
+Copyright
+---------
+See LICENSE file. 
+
+
+Building from Source
+--------------------
+To build from source, do a readonly checkout from github at:
+
+git clone git://github.com/jstark/revolution.git -b revolution_1.0
+
+The stable branch is named revolution_1.0. See "Contact Info" below for access to a readwrite checkout. The build system is based on cmake. After checking out the source code, create a 'build' directory, cd to it, and type 
+
+                            cmake ../ 
+
+for a simple build configuration. Typing then:
+
+                            make 
+
+will build the library. Typing 'make doc' will build the documentation, and 'make test' will run a couple of tests. On Windows with Visual Studio, cmake will create a VS solution which you can use to build the library and subprojects.
+
+Documentation
+-------------
+"Revolution" uses Doxygen for its documentation system. If you don't have doxygen, check the http://anvilofcode.wordpress.com for the project's documentation and user's guide.
+
+Contact Info
+------------
+Contact me at:
+
+http://anvilofcode.wordpress.com
+jsstark@gmail.com
+
+twitter username: gifou
+
+Change Log
+----------
+
+19.12.2011  v1.0.0  Revolution first stable release.

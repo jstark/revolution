@@ -56,10 +56,10 @@ int RVGetPatchVersion(void)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjectiveEvalFun fun)
+struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjectiveEvalFun fun, void *data)
 {
-	ObjectiveFunction *objfun = ObjectiveFunction::create(dim, objs, fun);
-	RVObjectiveFunction *wrapper = 0;
+	ObjectiveFunction *objfun = ObjectiveFunction::create(dim, objs, fun, data);
+	struct RVObjectiveFunction *wrapper = 0;
 	if (objfun)
 	{
 		wrapper = CONSTRUCT_POD_OBJECT(RVObjectiveFunction);
@@ -82,10 +82,10 @@ void RVObjectiveFunctionDestroy(struct RVObjectiveFunction* object)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int lambda, RVSelectionMode mode, RVObjectiveFunction *fun)
+struct RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int lambda, enum RVSelectionMode mode, struct RVObjectiveFunction *fun)
 {
 	BasicEs *es = BasicEs::create(mu, rho, lambda, mode, GET_WRAPPED_OBJECT(fun));
-	RVBasicEvolutionStrategy *wrapper = 0;
+	struct RVBasicEvolutionStrategy *wrapper = 0;
 	if (es)
 	{
 		wrapper = CONSTRUCT_POD_OBJECT(RVBasicEvolutionStrategy);
@@ -96,7 +96,7 @@ RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int la
 }
 
 /*---------------------------------------------------------------------------*/
-void RVBasicEvolutionStrategyInitializePopulation(RVBasicEvolutionStrategy *es, RVPopulationSetInitialValues fun, void *data)
+void RVBasicEvolutionStrategyInitializePopulation(struct RVBasicEvolutionStrategy *es, RVPopulationSetInitialValues fun, void *data)
 {
 	if (es)
 	{
@@ -107,7 +107,7 @@ void RVBasicEvolutionStrategyInitializePopulation(RVBasicEvolutionStrategy *es, 
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategySetParameterConstraints(RVBasicEvolutionStrategy *es, RVConstrainParam fun, void *data)
+void RVBasicEvolutionStrategySetParameterConstraints(struct RVBasicEvolutionStrategy *es, RVConstrainParam fun, void *data)
 {
     if (es)
     {
@@ -118,7 +118,7 @@ void RVBasicEvolutionStrategySetParameterConstraints(RVBasicEvolutionStrategy *e
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategyStart(RVBasicEvolutionStrategy *es)
+void RVBasicEvolutionStrategyStart(struct RVBasicEvolutionStrategy *es)
 {
 	if (es)
 	{
@@ -129,7 +129,7 @@ void RVBasicEvolutionStrategyStart(RVBasicEvolutionStrategy *es)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategyOnGenerationFinished(RVBasicEvolutionStrategy *es, RVGenerationFinished fun, void *data)
+void RVBasicEvolutionStrategyOnGenerationFinished(struct RVBasicEvolutionStrategy *es, RVGenerationFinished fun, void *data)
 {
 	if (es)
 	{
@@ -140,7 +140,7 @@ void RVBasicEvolutionStrategyOnGenerationFinished(RVBasicEvolutionStrategy *es, 
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategySetTerminationCriteria(RVBasicEvolutionStrategy *es, RVEvolutionShouldTerminate fun, void *data)
+void RVBasicEvolutionStrategySetTerminationCriteria(struct RVBasicEvolutionStrategy *es, RVEvolutionShouldTerminate fun, void *data)
 {
     if (es)
     {
@@ -151,7 +151,7 @@ void RVBasicEvolutionStrategySetTerminationCriteria(RVBasicEvolutionStrategy *es
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-double RVBasicEvolutionStrategyGetDesignParameter(RVBasicEvolutionStrategy *es, int parent, int paramIndex)
+double RVBasicEvolutionStrategyGetDesignParameter(struct RVBasicEvolutionStrategy *es, int parent, int paramIndex)
 {
 	if (es)
 	{
@@ -163,7 +163,7 @@ double RVBasicEvolutionStrategyGetDesignParameter(RVBasicEvolutionStrategy *es, 
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-double RVBasicEvolutionStrategyGetObjective(RVBasicEvolutionStrategy *es, int parent, int objIndex)
+double RVBasicEvolutionStrategyGetObjective(struct RVBasicEvolutionStrategy *es, int parent, int objIndex)
 {
 	if (es)
 	{
@@ -175,7 +175,7 @@ double RVBasicEvolutionStrategyGetObjective(RVBasicEvolutionStrategy *es, int pa
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategySetRNG(RVBasicEvolutionStrategy *es, RVRandom fun, void *data)
+void RVBasicEvolutionStrategySetRNG(struct RVBasicEvolutionStrategy *es, RVRandom fun, void *data)
 {
 	if (es)
 	{
@@ -186,7 +186,7 @@ void RVBasicEvolutionStrategySetRNG(RVBasicEvolutionStrategy *es, RVRandom fun, 
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategyDestroy(RVBasicEvolutionStrategy *es)
+void RVBasicEvolutionStrategyDestroy(struct RVBasicEvolutionStrategy *es)
 {
 	if (es)
 	{

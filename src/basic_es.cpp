@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <cmath>
 #include <vector>
-#include <set>
 #include <algorithm>
 #include <functional>
 #include <ctime>
@@ -76,7 +75,7 @@ public:
 		strParams[index] = value;
 	}
 
-	void swap(::Atom& rhs)
+	void swap(Atom& rhs)
 	{
 		revolution::Atom::swap(rhs); //FIXME: slice
 		strParams.swap(rhs.strParams);
@@ -101,12 +100,12 @@ public:
 };//~ BasicEs::Population
 
 /*--------------------------------------------------------------------------*/
-void gen_random_indices(unsigned int max, std::set<int>& indices)
+void gen_random_indices(unsigned int max, std::vector<int>& indices)
 {
-	while (indices.size() != max)
-	{
-		indices.insert(rand() % max);
-	}
+    for (std::vector<int>::size_type sz = 0; sz != max; ++sz)
+    {
+        indices[sz] = rand() % max;
+    }
 }
 
 /*--------------------------------------------------------------------------*/
@@ -117,17 +116,16 @@ public:
 
 	void apply(const std::vector<Atom *>& p, Atom& temp) const// intermediate recombination (for the moment)
 	{
-		std::set<int> random_indices;
+		std::vector<int> random_indices(rho, 0);
 		gen_random_indices(rho, random_indices);
 		for (int varIndex = 0; varIndex != n; ++varIndex)
 		{
 			double paramSum = 0.0;
 			double strategySum = 0.0;
 			Atom *atom = 0;
-			for (std::set<int>::const_iterator i = random_indices.begin();
-				i != random_indices.end(); ++i)
+			for (std::vector<int>::size_type i = 0; i != random_indices.size(); ++i)
 			{
-				atom = p[*i];
+				atom = p[i];
 				paramSum += atom->operator[](varIndex);
 				strategySum += atom->strategyParam(varIndex);
 			}
@@ -429,11 +427,17 @@ void BasicEs::setParamConstraints(RVConstrainParam fun, void *data)
 }
 
 /*--------------------------------------------------------------------------*/
-BasicEs* BasicEs::create(int mu, int rho, int lambda,RVSelectionMode mode, ObjectiveFunction *objf)
+static bool isValidMode(enum RVSelectionMode mode)
 {
-	bool invalidPopulation = mu < 0 || lambda < 0;
-	bool invalidRecombinationConstant = rho < 0 || rho > mu;
-	bool invalidSelectionMode = mode == kRVSelectionModeComma ? (lambda >= mu ? false : true) : false;
+    return (mode != kRVSelectionModeComma) && (mode != kRVSelectionModePlus);
+}
+
+/*--------------------------------------------------------------------------*/
+BasicEs* BasicEs::create(int mu, int rho, int lambda, enum RVSelectionMode mode, ObjectiveFunction *objf)
+{
+	bool invalidPopulation = (mu <= 0) || (lambda <= 0);
+	bool invalidRecombinationConstant = (rho <= 0) || rho > mu;
+	bool invalidSelectionMode = isValidMode(mode);
 
 	if (invalidPopulation || invalidRecombinationConstant || invalidSelectionMode)
 	{
