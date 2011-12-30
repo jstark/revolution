@@ -15,6 +15,9 @@ SET (rev_src
 )
 
 add_library (revolution SHARED ${rev_src})
-set_target_properties(revolution PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${COMMON_OUTPUT_DIR})
+set_target_properties(revolution PROPERTIES 
+    RUNTIME_OUTPUT_DIRECTORY ${COMMON_OUTPUT_DIR}
+    SOVERSION 1.0
+    VERSION 1.0)
 install (TARGETS revolution DESTINATION "${PROJECT_BINARY_DIR}/lib")
 install (FILES revolution.h DESTINATION "${PROJECT_BINARY_DIR}/include")
