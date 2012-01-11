@@ -74,7 +74,7 @@ DLL_PUBLIC int RVGetPatchVersion(void);
  */
 struct RVObjectiveFunction;
 
-/*! \typedef RVObjectiveEvalFun
+/*! \typedef RVObjectiveEvalFun(const double *dv, double *obj, void *data)
  *  \brief A function signature that evaluates a design vector.
  *  @see RVObjectiveFunctionCreate()
  *  \param dv a pointer to the design parameters
@@ -139,7 +139,7 @@ enum RVSelectionMode
  */
 DLL_PUBLIC struct RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int lambda, enum RVSelectionMode mode, struct RVObjectiveFunction *fun);
 
-/*! \typedef RVPopulationSetInitialValues
+/*! \typedef RVPopulationSetInitialValues(double *params, double *objectives, void *data);
  *  \brief A function signature that calculates the initial population values. 
  *  \param params the design vector of a candidate solution.
  *  \param objectives a pointer to the objectives vector. You do not need change the objective values. The Objective function will be called automatically after the initialization function.
