@@ -4,7 +4,9 @@ http://anvilofcode.wordpress.com
 
 Overview
 --------
-"Revolution" is a C/C++ optimization framework for single-objective functions and problems. The API uses a simple optimizer based on Evolution Strategies. The library uses a single header file (revolution.h) and can be used from C or C++.
+"Revolution" is a C/C++ optimization framework for single-objective functions and problems. 
+The API uses a simple optimizer based on Evolution Strategies. The library uses a single header file (revolution.h) 
+and can be used from C or C++.
 
 Example
 -------
@@ -21,7 +23,8 @@ To build from source, do a readonly checkout from github at:
 
 git clone git://github.com/jstark/revolution.git -b revolution_1.0
 
-The stable branch is named revolution_1.0. See "Contact Info" below for access to a readwrite checkout. The build system is based on cmake. After checking out the source code, create a 'build' directory, cd to it, and type 
+The stable branch is named revolution_1.0. See "Contact Info" below for access to a readwrite checkout. 
+The build system is based on cmake. After checking out the source code, create a 'build' directory, cd to it, and type 
 
                             cmake ../ 
 
@@ -29,11 +32,13 @@ for a simple build configuration. Typing then:
 
                             make 
 
-will build the library. Typing 'make doc' will build the documentation, and 'make test' will run a couple of tests. On Windows with Visual Studio, cmake will create a VS solution which you can use to build the library and subprojects.
+will build the library. Typing 'make doc' will build the documentation, and 'make test' will run a couple of tests. 
+On Windows with Visual Studio, cmake will create a VS solution which you can use to build the library and subprojects.
 
 Documentation
 -------------
-"Revolution" uses Doxygen for its documentation system. If you don't have doxygen, check the http://anvilofcode.wordpress.com for the project's documentation and user's guide.
+"Revolution" uses Doxygen for its documentation system. If you don't have doxygen, 
+check the http://anvilofcode.wordpress.com for the project's documentation and user's guide.
 
 Contact Info
 ------------
