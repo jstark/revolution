@@ -1,5 +1,6 @@
 #include "atom.h"
 #include "objective_function.h"
+#include "array.h"
 #include <limits>
 
 using revolution::Atom;
@@ -30,7 +31,9 @@ double& Atom::operator[](int index)
 /*---------------------------------------------------------------------------*/
 void Atom::eval(const revolution::ObjectiveFunction& fun)
 {
-	fun.eval(&params[0], &objectives[0]);
+    struct RVArray dv = { &params[0], params.size() };
+    struct RVArray ov = { &objectives[0], params.size() };
+	fun.eval(&dv, &ov);
 }
 
 /*---------------------------------------------------------------------------*/

@@ -272,8 +272,9 @@ double massViolation(const double *masses)
 	return err;
 }
 
-int evalf(const double *dv, double *obj, void *data)
+int evalf(struct RVArray const* dv, struct RVArray *obj, void *data)
 {
+#if 0
 	Point new_cog = {0, 0, 0, 0};
 	obj[0] = 0;
 	Calculate_Cog(dv, &new_cog);
@@ -283,6 +284,7 @@ int evalf(const double *dv, double *obj, void *data)
 	Calculate_InertiaTensor(dv, &it);
 	obj[0] = obj[0]+InertiaError(it);
 	obj[0] += massViolation(dv);
+#endif
 	return 0;
 }
 

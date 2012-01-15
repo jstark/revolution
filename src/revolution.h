@@ -4,6 +4,8 @@
 #ifndef REVOLUTION_H_INCLUDED
 #define REVOLUTION_H_INCLUDED
 
+#include <stdlib.h>
+
 /* From API C++ */
 #if defined _WIN32 || defined __CYGWIN__
 	#ifdef revolution_EXPORTS // define this when generating DLL
@@ -37,7 +39,7 @@
 /*! \def RV_API_MINOR
  *  \brief The library's major version.
  */
-#define RV_API_MINOR	0
+#define RV_API_MINOR	1
 /*! \def RV_API_PATCH
  *  \brief The library's major version.
  */
@@ -66,6 +68,45 @@ DLL_PUBLIC int RVGetMinorVersion(void);
  */
 DLL_PUBLIC int RVGetPatchVersion(void);
 
+/*! \struct RVArray;
+ *  \brief Represents a numeric vector.
+ *  You cannot create or destroy a RVArray object, but there are many functions that accept
+ *  one as argument. 
+ *  @see RVArrayGetSize() RVArrayGetElementAtIndex(), RVArraySetElementAtIndex().
+ */
+struct RVArray;
+
+/*! \fn size_t RVArrayGetSize(struct RVArray const *array);
+ *  \brief Find the size of an array.
+ *  \param array an RVArray object.
+ *  @see RVArrayGetElementAtIndex(), RVArraySetElementAtIndex()
+ *  \returns the size of the array, or -1 if array was NULL.
+ */
+DLL_PUBLIC size_t RVArrayGetSize(struct RVArray const *array);
+
+/*! \fn double RVArrayGetElementAtIndex(struct RVArray const *array, size_t index);
+ *  \brief Get the value at a specified index
+ *  This function queries an array's elements. Be careful, however, for if you supply 
+ *  an index that is out of bounds (greater than the size of the array), the result is 
+ *  undefined. There is no bound checking.
+ *  \param array an RVArray object
+ *  \param index the index of the element
+ *  \returns the element at the specified index
+ *  @see RVArraySetElementAtIndex(), RVArrayGetSize()
+ */
+DLL_PUBLIC double RVArrayGetElementAtIndex(struct RVArray const *array, size_t index);
+
+/*! \fn void RVArraySetElementAtIndex(struct RVArray *array, size_t index, double value);
+ *  \brief Sets a value at the specified index.
+ *  This function changes the value of an array at the specified index. Have in mind, that
+ *  there is no bound checking. 
+ *  \param array an RVArray object.
+ *  \param index the element's index
+ *  \param value the new value at the specified index
+ *  @see RVArrayGetElementAtIndex(), RVArrayGetSize()
+ */
+DLL_PUBLIC void RVArraySetElementAtIndex(struct RVArray *array, size_t index, double value);
+
 /*! \struct RVObjectiveFunction;
  *  \brief Represents an objective function to be optimized.
  *  An optimization problem's objective function is modeled by an object of 
@@ -74,17 +115,18 @@ DLL_PUBLIC int RVGetPatchVersion(void);
  */
 struct RVObjectiveFunction;
 
-/*! \typedef RVObjectiveEvalFun
+/*! \typedef int (*RVObjectiveEvaluationFun(struct RVArray *const dv, struct RVArray *obj, void *data);
  *  \brief A function signature that evaluates a design vector.
- *  @see RVObjectiveFunctionCreate()
- *  \param dv a pointer to the design parameters
- *  \param obj a pointer to the objectives
+ *  This function is called in every generation to evaluate each population atom.
+ *  \param dv a pointer to an RVArray of the design parameters.
+ *  \param obj a pointer to an RVArray of the objectives, to be calculated
  *  \param data the user-supplied data, if any, used for the creation of 
  *  objective function object.
+ *  @see RVObjectiveFunctionCreate()
  */
-typedef int (*RVObjectiveEvalFun)(const double *dv, double *obj, void *data);
+typedef int (*RVObjectiveEvaluationFun)(struct RVArray const* dv, struct RVArray *obj, void *data);
 
-/*! \fn RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun, void *data);
+/*! \fn RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvaluationFun fun, void *data);
  *  \brief Creates an object that defines an optimization problem.
  *  All objects created by this function should be destroyed by RVObjectiveFunctionDestroy(). 
  *  \param dim the dimensionality of the problem, which must be greater or equal to 1.
@@ -95,7 +137,7 @@ typedef int (*RVObjectiveEvalFun)(const double *dv, double *obj, void *data);
  *  initialize a RVBasicEvolutionStrategy. The function returns NULL if any of the parameters were invalid. 
  *  @see RVBasicEvolutionStrategyCreate(), RVObjectiveFunctionDestroy()
  */
-DLL_PUBLIC struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun, void *data);
+DLL_PUBLIC struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvaluationFun fun, void *data);
 
 /*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
  *  \brief Destroys an RVObjectiveFunction object.

@@ -9,11 +9,12 @@
 #define DIM         2
 #define SELECTION kRVSelectionModePlus
 
-int himmelblau(const double *dv, double *obj, void *data)
+int himmelblau(struct RVArray const *dv, struct RVArray *obj, void *data)
 {
-    double x = dv[0];
-    double y = dv[1];
-    obj[0] = (x*x + y - 11) * (x*x + y - 11) + (x + y*y - 7)*(x + y*y - 7);
+    double x = RVArrayGetElementAtIndex(dv, 0);
+    double y = RVArrayGetElementAtIndex(dv, 1);
+    double f = (x*x + y - 11) * (x*x + y - 11) + (x + y*y - 7)*(x + y*y - 7);
+    RVArraySetElementAtIndex(obj, 0, f);
 	return 0;
 }
 

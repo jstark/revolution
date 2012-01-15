@@ -1,3 +1,4 @@
+#include "array.h"
 #include "revolution.h"
 #include "version.h"
 #include "objective_function.h"
@@ -53,7 +54,37 @@ int RVGetPatchVersion(void)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjectiveEvalFun fun, void *data)
+size_t RVArrayGetSize(struct RVArray const *array)
+{
+    if (array)
+    {
+        return array->size;
+    }
+    return -1;
+}
+
+/*---------------------------------------------------------------------------*/
+double RVArrayGetElementAtIndex(struct RVArray const *array, size_t index)
+{
+    if (array)
+    {
+        return array->data[index];
+    }
+    return std::numeric_limits<double>::quiet_NaN();
+}
+
+/*---------------------------------------------------------------------------*/
+void RVArraySetElementAtIndex(struct RVArray *array, size_t index, double value)
+{
+    if (array)
+    {
+        array->data[index] = value;
+    }
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjectiveEvaluationFun fun, void *data)
 {
 	ObjectiveFunction *objfun = ObjectiveFunction::create(dim, objs, fun, data);
 	struct RVObjectiveFunction *wrapper = 0;
