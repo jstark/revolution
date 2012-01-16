@@ -316,11 +316,11 @@ void printBest(RVBasicEvolutionStrategy *es, int gen, void *data)
 #endif
 }
 
-void init(double *params, double *objectives, void *data)
+void init(struct RVArray *params, struct RVArray *objectives, void *data)
 {
 	for (int i = 0; i < DIM; ++i)
 	{
-		params[i] = MASS_TO_ADD / DIM;
+        RVArraySetElementAtIndex(params, i, MASS_TO_ADD / DIM);
 	}
 }
 
@@ -364,12 +364,13 @@ int shouldTerminate(RVBasicEvolutionStrategy *es, unsigned int g, void *data)
 	return 0;
 }
 
-void constrainMasses(double *dv, void *data)
+void constrainMasses(struct RVArray *dv, void *data)
 {
 	for (int i = 0; i < DIM; ++i)
 	{
-		if (dv[i] < 0.0) dv[i] = 0.0;
-		if (dv[i] > MASS_HI_BOUNDS[i]) dv[i] = MASS_HI_BOUNDS[i];
+        double val = RVArrayGetElementAtIndex(dv, i);
+		if (val < 0.0) RVArraySetElementAtIndex(dv, i, 0.0); 
+		if (val > MASS_HI_BOUNDS[i]) RVArraySetElementAtIndex(dv, i, MASS_HI_BOUNDS[i]);
 	}
 }
 

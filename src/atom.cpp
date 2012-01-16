@@ -66,7 +66,9 @@ void Atom::initialize(RVPopulationSetInitialValues fun, void *data)
 {
 	if (fun)
 	{
-		fun(&params[0], &objectives[0], data);
+        struct RVArray dv = { &params[0], params.size() };
+        struct RVArray ov = { &objectives[0], params.size() };
+		fun(&dv, &ov, data);
 	}
 }
 
@@ -75,6 +77,7 @@ void Atom::constrain(RVConstrainParam fun, void *data)
 {
     if (fun)
     {
-        fun(&params[0], data);
+        struct RVArray dv = { &params[0], params.size() };
+        fun(&dv, data);
     }
 }
