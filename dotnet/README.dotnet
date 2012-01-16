@@ -1,0 +1,12 @@
+--- Simple instructions to use the dotnet bindings ---
+
+1. Build the library (use a 32bit for mono)
+2. Build the bindings,
+    a. Under linux/osx, use 'dmcs /t:library Revolution.cs'
+    b. Under windows, use 'csc /t:library Revolution.cs'
+3. Build the simple Sphere2 example
+    a. Under linux/osx, use 'dmcs /r:Revolution.cs Test.cs'
+    b. Under windows, use 'csc /r:Revolution.cs Test.cs
+4. Run the Sphere2 example
+    a. Under linux/osx, use 'mono Test.exe'
+    b. Under windows, just type 'Test.exe'
