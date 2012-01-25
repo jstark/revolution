@@ -39,11 +39,11 @@
 /*! \def RV_API_MINOR
  *  \brief The library's major version.
  */
-#define RV_API_MINOR	1
+#define RV_API_MINOR	0
 /*! \def RV_API_PATCH
  *  \brief The library's major version.
  */
-#define RV_API_PATCH	0
+#define RV_API_PATCH	1
 
 #ifdef __cplusplus
 extern "C" {

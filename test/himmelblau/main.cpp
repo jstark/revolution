@@ -30,9 +30,10 @@ void printBest(RVBasicEvolutionStrategy *es, int gen, void *data)
     */
 }
 
-void init(double *params, double *objectives, void *data)
+void init(struct RVArray *params, struct RVArray *objectives, void *data)
 {
-    params[0] = params[1] = 0.0;
+    RVArraySetElementAtIndex(params, 0, 0.0);
+    RVArraySetElementAtIndex(params, 1, 0.0);
 }
 
 int shouldTerminate(RVBasicEvolutionStrategy *es, unsigned int g, void *data)
