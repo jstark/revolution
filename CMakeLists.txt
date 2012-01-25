@@ -8,10 +8,6 @@ set(COMMON_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin)
 add_subdirectory (src)
 add_subdirectory (doxygen)
 
-set (CMAKE_SKIP_BUILD_RPATH TRUE)
-set (CMAKE_INSTALL_RPATH ".")
-set (CMAME_BUILD_WITH_INSTALL_RPATH TRUE)
-
 enable_testing()
 find_package(GTest)
 if (GTEST_FOUND)

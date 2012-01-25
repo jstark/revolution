@@ -6,6 +6,8 @@ import argparse
 from pyparsing import Keyword, Word, alphas, ZeroOrMore, delimitedList
 from pyparsing import Group, Optional, ParseException, Literal, cStyleComment
 
+ModuleOrClassName = 'Name'
+
 # Code generators
 class CSharpGen:
     def emit(self, code):
@@ -13,7 +15,7 @@ class CSharpGen:
         lines.append('using System;')
         lines.append('using System.Runtime.InteropServices;')
         lines.append('\n')
-        lines.append('public static class __X {')
+        lines.append('public static class '+ModuleOrClassName+' {')
         for cl in code:
             if cl[0] == 'DLL_PUBLIC':
                 lines.append(self.emitFunction(cl))
@@ -99,8 +101,8 @@ pointerSymbol = Literal('*')
 # case 2. enum Enum_name
 # case 3. int, double, void, unsigned int
 funReturnType = structKwd + Word(alphas) + pointerSymbol \
-              | enumKwd + Word(alphas) \
               | commonKwd
+              #| enumKwd + Word(alphas) \
 
 # fun argument
 # case 1. struct Struct_name * Argument_name
@@ -175,17 +177,17 @@ def makeBindings():
     parser = argparse.ArgumentParser('creates bindings from a \'C\' header')
     parser.add_argument('--f', metavar = 'source_file', help = 'The \'C\' file to parse')
     parser.add_argument('--g', default='csharp', metavar = 'code_gen', help = 'The code generator to use, e.g \'python\'')
+    parser.add_argument('--n', default='Name', metavar = 'name', help = 'The name to use for the generated module/class, if applicable')
     args = parser.parse_args()
 
-    if args.f is None:
-        parser.print_usage()
-        return
-    elif args.g is None:
+    if None in [args.f, args.g, args.n]:
         parser.print_usage()
     elif not CodeGenerators.has_key(args.g):
         print 'Invalid code generator!. Valid Generators are:'
         for g in CodeGenerators: print `g`
     else:
+        global ModuleOrClassName
+        ModuleOrClassName = args.n
         makeBindingsForFile(args.f, args.g)
 
 if __name__ == "__main__":
