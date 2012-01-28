@@ -73,6 +73,54 @@ struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjec
 
 /*---------------------------------------------------------------------------*/
 extern "C"
+int RVObjectiveFunctionGetDimensionality(struct RVObjectiveFunction *f)
+{
+    if (f)
+    {
+        ObjectiveFunction *obj = GET_WRAPPED_OBJECT(f);
+        return obj->dim();
+    }
+    return 0;
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+int RVObjectiveFunctionGetNumberOfObjectives(struct RVObjectiveFunction *f)
+{
+    if (f)
+    {
+        ObjectiveFunction *obj = GET_WRAPPED_OBJECT(f);
+        return obj->objectives();
+    }
+    return 0;
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+RVObjectiveEvalFun RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *f)
+{
+    if (f)
+    {
+        ObjectiveFunction *obj = GET_WRAPPED_OBJECT(f);
+        return obj->evalFun();
+    }
+    return 0;
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+void * RVObjectiveFunctionGetUserData(struct RVObjectiveFunction *f)
+{
+    if (f)
+    {
+        ObjectiveFunction *obj = GET_WRAPPED_OBJECT(f);
+        return obj->data();
+    }
+    return 0;
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
 void RVObjectiveFunctionDestroy(struct RVObjectiveFunction* object)
 {
 	if (object)
@@ -231,6 +279,13 @@ void RVCmaEvolutionStrategyDestroy(RVCmaEvolutionStrategy *es)
 extern "C"
 struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun)
 {
+    DifferentialEvolution *de = DifferentialEvolution::create(pnum, Fp, CRp, fun);
+    if (de) {
+        RVDifferentialEvolution *wrapper = CONSTRUCT_POD_OBJECT(RVDifferentialEvolution);
+        SET_WRAPPED_OBJECT(wrapper, de);
+        de->setWrapperObject(wrapper);
+        return wrapper;
+    }
     return 0;
 }
 
@@ -238,5 +293,10 @@ struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum,
 extern "C"
 void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de)
 {
-    
+    if (de)
+    {
+        DifferentialEvolution *in = GET_WRAPPED_OBJECT(de);
+        delete in;
+        FREE_POD_OBJECT(de);
+    }
 }

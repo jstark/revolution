@@ -97,6 +97,15 @@ typedef int (*RVObjectiveEvalFun)(const double *dv, double *obj, void *data);
  */
 DLL_PUBLIC struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvalFun fun, void *data);
 
+
+DLL_PUBLIC int RVObjectiveFunctionGetDimensionality(struct RVObjectiveFunction *f);
+    
+DLL_PUBLIC int RVObjectiveFunctionGetNumberOfObjectives(struct RVObjectiveFunction *f);
+    
+DLL_PUBLIC RVObjectiveEvalFun RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *f);
+    
+DLL_PUBLIC void * RVObjectiveFunctionGetUserData(struct RVObjectiveFunction *f);
+
 /*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
  *  \brief Destroys an RVObjectiveFunction object.
  *  \param obf a pointer to an object created by RVObjectiveFunctionCreate(). The argument 

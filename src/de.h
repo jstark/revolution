@@ -10,7 +10,9 @@ class DLL_HIDDEN DifferentialEvolution
 {
 public:
     static DifferentialEvolution *create(unsigned int p, double Fp, double CRp, struct RVObjectiveFunction *fun);
+    void setWrapperObject(RVDifferentialEvolution *wrapper);
 private:
+    DifferentialEvolution(unsigned int p, double Fp, double CRp, struct RVObjectiveFunction *fun);
     struct DEImpl;
     DEImpl *pimpl;
 };
