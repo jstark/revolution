@@ -266,6 +266,12 @@ DLL_PUBLIC void RVBasicEvolutionStrategySetRNG(struct RVBasicEvolutionStrategy *
  *  @see RVBasicEvolutionStrategyCreate()
  */
 DLL_PUBLIC void RVBasicEvolutionStrategyDestroy(struct RVBasicEvolutionStrategy *es);
+    
+struct RVDifferentialEvolution;
+
+DLL_PUBLIC struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun);
+    
+DLL_PUBLIC void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de);
 
 /* preliminary support for cma algorithm */
 struct RVCmaEvolutionStrategy;

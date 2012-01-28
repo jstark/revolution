@@ -3,6 +3,7 @@
 #include "objective_function.h"
 #include "basic_es.h"
 #include "cma_es.h"
+#include "de.h"
 #include <cstdio>
 #include <cstdlib>
 #include <limits>
@@ -11,6 +12,7 @@ using revolution::Version;
 using revolution::ObjectiveFunction;
 using revolution::BasicEs;
 using revolution::CmaEs;
+using revolution::DifferentialEvolution;
 
 /*---------------------------------------------------------------------------*/
 
@@ -25,6 +27,7 @@ using revolution::CmaEs;
 DEFINE_POD_WRAPPER_STRUCT(RVObjectiveFunction, ObjectiveFunction)
 DEFINE_POD_WRAPPER_STRUCT(RVBasicEvolutionStrategy, BasicEs)
 DEFINE_POD_WRAPPER_STRUCT(RVCmaEvolutionStrategy, CmaEs)
+DEFINE_POD_WRAPPER_STRUCT(RVDifferentialEvolution, DifferentialEvolution)
 
 #define CONSTRUCT_POD_OBJECT(ClassName) \
 	static_cast<ClassName *>(std::calloc(1, sizeof(ClassName)))
@@ -223,3 +226,17 @@ void RVCmaEvolutionStrategyDestroy(RVCmaEvolutionStrategy *es)
 	}
 }
 
+/*---------------------------------------------------------------------------*/
+
+extern "C"
+struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun)
+{
+    return 0;
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de)
+{
+    
+}
