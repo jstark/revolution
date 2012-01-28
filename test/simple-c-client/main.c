@@ -1,7 +1,7 @@
 #include "revolution.h"
 #include <stdio.h>
 
-int evalf(const double *dv, double *obj, void *data)
+int evalf(const struct RVArray *dv, struct RVArray *obj, void *data)
 {
 	return 0;
 }

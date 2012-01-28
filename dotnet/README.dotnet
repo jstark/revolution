@@ -1,0 +1,16 @@
+--- Simple instructions to use the dotnet bindings ---
+
+1. Build the REVOLUTION library (use a 32bit for mono)
+2. Generate the bindings
+    a. run 'python makebind.py --f path/to/revolution.h --n Revolution' >& Revolution.cs
+    This will generate a Revolution.cs file.
+2. Build the bindings,
+    a. Under linux/osx, use 'dmcs /t:library Revolution.cs'
+    b. Under windows, use 'csc /t:library Revolution.cs'
+3. Build the simple Ackley2 example
+    a. Under linux/osx, use 'dmcs /r:Revolution.dll Ackley2.cs'
+    b. Under windows, use 'csc /r:Revolution.dll Ackley2.cs
+    This step assumes that the REVOLUTION native library is in the same directory as the .net wrapper.
+4. Run the Ackley2 example
+    a. Under linux/osx, use 'mono Ackley2.exe'
+    b. Under windows, just type 'Ackley2.exe'

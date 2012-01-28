@@ -8,7 +8,6 @@ set(COMMON_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin)
 add_subdirectory (src)
 add_subdirectory (doxygen)
 
-
 enable_testing()
 find_package(GTest)
 if (GTEST_FOUND)

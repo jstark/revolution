@@ -16,9 +16,13 @@ SET (rev_src
 		cma_es.cpp
 		de.h
 		de.cpp
+        	array.h
 )
 
 add_library (revolution SHARED ${rev_src})
-set_target_properties(revolution PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${COMMON_OUTPUT_DIR})
+set_target_properties(revolution PROPERTIES 
+    RUNTIME_OUTPUT_DIRECTORY ${COMMON_OUTPUT_DIR}
+    SOVERSION 1.1
+    VERSION 1.1)
 install (TARGETS revolution DESTINATION "${PROJECT_BINARY_DIR}/lib")
 install (FILES revolution.h DESTINATION "${PROJECT_BINARY_DIR}/include")
