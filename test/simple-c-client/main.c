@@ -13,6 +13,10 @@ int main(int argc, char *argv[])
 	RVBasicEvolutionStrategyDestroy(es);
     struct RVCmaEvolutionStrategy *cma_es = RVCmaEvolutionStrategyCreate(10, object);
     RVCmaEvolutionStrategyDestroy(cma_es);
-	RVObjectiveFunctionDestroy(object);
+	
+    
+    struct RVDifferentialEvolution *de = RVDifferentialEvolutionCreate(10, 0.5, 0.5, object);
+    RVDifferentialEvolutionDestroy(de);
+    RVObjectiveFunctionDestroy(object);
 	return 0;
 }
