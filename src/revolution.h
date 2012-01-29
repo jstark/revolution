@@ -139,13 +139,36 @@ typedef int (*RVObjectiveEvaluationFun)(const struct RVArray* dv, struct RVArray
  */
 DLL_PUBLIC struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvaluationFun fun, void *data);
 
-
+/*! \fn int RVObjectiveFunctionGetDimensionality(struct RVObjectiveFunction *f)
+ *	\brief Gets the dimensionality <i>n</i> for the given objective function.
+ *	\param f an objective function object.
+ *	\return the dimensionality
+ *	@see RVObjectiveFunctionCreate(), RVObjectiveFunctionGetNumberOfObjectives()
+ */
 DLL_PUBLIC int RVObjectiveFunctionGetDimensionality(struct RVObjectiveFunction *f);
-    
+
+/*! \fn int RVObjectiveFunctionGetNumberOfObjectives(struct RVObjectiveFunction *f)
+ *	\brief Gets the number of objectives <i>m</i> of the given objective function.
+ *	\param f an objective function object.
+ *	\return the number of objectives
+ *	@see RVObjectiveFunctionCreate(), RVObjectiveFunctionGetDimmensionality()
+ */
 DLL_PUBLIC int RVObjectiveFunctionGetNumberOfObjectives(struct RVObjectiveFunction *f);
-    
+
+/*!	\fn RVObjectiveEvaluationFun RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *f)
+ *	\brief Gets the evaluation function from for the given objective function object.
+ *	\param f an objective function object
+ *	\return the evaluation function
+ *	@see RVObjectiveFunctionCreate()
+ */
 DLL_PUBLIC RVObjectiveEvaluationFun RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *f);
     
+/*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *object)
+ *	\brief Gets the user data from an objective function object.
+ *	\param f an objective function object.
+ *	\return the user data, if any, or NULL.
+ *	@see RVObjectiveFunctionCreate()
+ */
 DLL_PUBLIC void * RVObjectiveFunctionGetUserData(struct RVObjectiveFunction *f);
 
 /*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
@@ -318,8 +341,22 @@ DLL_PUBLIC void RVBasicEvolutionStrategySetRNG(struct RVBasicEvolutionStrategy *
  */
 DLL_PUBLIC void RVBasicEvolutionStrategyDestroy(struct RVBasicEvolutionStrategy *es);
     
+/*! \struct RVDifferentialEvolution;
+ *  \brief Represents a differential evolution algorithm.
+ *  @see RVDifferentialEvolutionCreate()
+ */
 struct RVDifferentialEvolution;
 
+/*!	\fn struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun)
+ *	\brief Creates a differential evolution object.
+ *	Use this function to build a differential evolution object.
+ *	\param pnum the population size, a number greater than zero.
+ *	\param Fp the differential weight, which is a number in the [0, 2] interval.
+ *	\param CRp the crossover coefficient, which is a number in the [0, 1] interval.
+ *	\param fun the objective function object to be minimized. It must not be NULL. 
+ *  \return a differential evolution object or NULL, if any of the arguments were invalid.
+ *	@see RVDifferentialEvolutionStart(), RVDifferentialEvolutionDestroy()
+ */
 DLL_PUBLIC struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun);
 	
 typedef void (*RVDifferentialEvolutionPopulationSetInitialValues)(struct RVArray *designParams, struct RVArray *objectives, void *data);
