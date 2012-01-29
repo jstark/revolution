@@ -14,6 +14,9 @@ public:
 	void setTermination(RVDifferentialEvolutionShouldTerminate fun, void *data);
 	void setOnGenerationFinished(RVDifferentialEvolutionOnGenerationFinished fun, void *data);
 	void initializePopulation(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data);
+	double getDesignParameter(int agentIndex, int paramIndex) const;
+	double getObjective(int agentIndex, int objectiveIndex) const;
+	void start();
 private:
     DifferentialEvolution(unsigned int p, double Fp, double CRp, struct RVObjectiveFunction *fun);
     struct DEImpl;

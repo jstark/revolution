@@ -331,6 +331,11 @@ DLL_PUBLIC void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDiffe
 typedef int (*RVDifferentialEvolutionShouldTerminate)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
 DLL_PUBLIC void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionShouldTerminate t, void *data);
 
+DLL_PUBLIC double RVDifferentialEvolutionGetDesignParameter(struct RVDifferentialEvolution *de, int agentIndex, int paramIndex);
+	
+DLL_PUBLIC double RVDifferentialEvolutionGetObjective(struct RVDifferentialEvolution *de, int agentIndex, int objectiveIndex);
+	
+DLL_PUBLIC void RVDifferentialEvolutionStart(struct RVDifferentialEvolution *de);
 
 DLL_PUBLIC void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de);
 

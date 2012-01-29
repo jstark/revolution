@@ -354,6 +354,41 @@ void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de
 
 /*---------------------------------------------------------------------------*/
 extern "C"
+double RVDifferentialEvolutionGetDesignParameter(struct RVDifferentialEvolution *de, int agentIndex, int paramIndex)
+{
+	if (de)
+	{
+		DifferentialEvolution *dev = GET_WRAPPED_OBJECT(de);
+		return dev->getDesignParameter(agentIndex, paramIndex);
+	}
+	return std::numeric_limits<double>::quiet_NaN();
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+double RVDifferentialEvolutionGetObjective(struct RVDifferentialEvolution *de, int agentIndex, int objectiveIndex)
+{
+	if (de)
+	{
+		DifferentialEvolution *dev = GET_WRAPPED_OBJECT(de);
+		return dev->getObjective(agentIndex, objectiveIndex); // FIXME: should be 0 
+	}
+	return std::numeric_limits<double>::quiet_NaN();
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+void RVDifferentialEvolutionStart(struct RVDifferentialEvolution *de)
+{
+	if (de)
+	{
+		DifferentialEvolution *dev = GET_WRAPPED_OBJECT(de);
+		dev->start();
+	}
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
 void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de)
 {
     if (de)

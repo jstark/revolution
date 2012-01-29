@@ -9,6 +9,11 @@ using revolution::DifferentialEvolution;
 using revolution::Population;
 using revolution::Atom;
 
+static bool compare_single_obj(const Atom* a1, const Atom* a2)
+{
+	return a1->f(0) < a2->f(0);
+}
+
 /*---------------------------------------------------------------------------*/
 struct DifferentialEvolution::DEImpl : private Population<Atom>
 {
@@ -46,6 +51,16 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
 		evolutionShouldTerminateData_ = data;
 	}
 	
+	double getDesignParameter(int agentIndex, int paramIndex) const
+	{
+		return atom_ref[agentIndex]->operator[](paramIndex);
+	}
+	
+	double getObjective(int agentIndex, int objectiveIndex) const
+	{
+		return atom_ref[agentIndex]->f(objectiveIndex);
+	}
+	
 	void start()
 	{
         static const unsigned int MAX_GEN = 1000;
@@ -73,6 +88,9 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
                 break;
             }
 		}
+		
+		// after evolution finishes, we need to sort
+		std::sort(atom_ref.begin(), atom_ref.end(), compare_single_obj);
 	}
 	
 	void doEvolutionStep()
@@ -161,6 +179,24 @@ void DifferentialEvolution::setOnGenerationFinished(RVDifferentialEvolutionOnGen
 void DifferentialEvolution::initializePopulation(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
 {
 	pimpl->initializePopulation(fun, data);
+}
+
+/*---------------------------------------------------------------------------*/
+void DifferentialEvolution::start()
+{
+	pimpl->start();
+}
+
+/*---------------------------------------------------------------------------*/
+double DifferentialEvolution::getDesignParameter(int agentIndex, int paramIndex) const
+{
+	return pimpl->getDesignParameter(agentIndex, paramIndex);
+}
+
+/*---------------------------------------------------------------------------*/
+double DifferentialEvolution::getObjective(int agentIndex, int objectiveIndex) const
+{
+	return pimpl->getObjective(agentIndex, objectiveIndex);
 }
 
 /*---------------------------------------------------------------------------*/
