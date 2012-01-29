@@ -39,11 +39,11 @@
 /*! \def RV_API_MINOR
  *  \brief The library's major version.
  */
-#define RV_API_MINOR	0
+#define RV_API_MINOR	1
 /*! \def RV_API_PATCH
  *  \brief The library's major version.
  */
-#define RV_API_PATCH	1
+#define RV_API_PATCH	0
 
 #ifdef __cplusplus
 extern "C" {
@@ -321,12 +321,20 @@ DLL_PUBLIC void RVBasicEvolutionStrategyDestroy(struct RVBasicEvolutionStrategy 
 struct RVDifferentialEvolution;
 
 DLL_PUBLIC struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun);
-    
+
+typedef void (*RVDifferentialEvolutionOnGenerationFinished)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
+DLL_PUBLIC void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionOnGenerationFinished fun, void *data);
+
+typedef int (*RVDifferentialEvolutionShouldTerminate)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
+DLL_PUBLIC void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionShouldTerminate t, void *data);
+
+
 DLL_PUBLIC void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de);
 
 /* preliminary support for cma algorithm */
 struct RVCmaEvolutionStrategy;
 DLL_PUBLIC struct RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, struct RVObjectiveFunction *fun);
+
 DLL_PUBLIC void RVCmaEvolutionStrategyDestroy(struct RVCmaEvolutionStrategy *es);
 #ifdef __cplusplus
 }

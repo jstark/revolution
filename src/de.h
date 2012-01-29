@@ -11,6 +11,8 @@ class DLL_HIDDEN DifferentialEvolution
 public:
     static DifferentialEvolution *create(unsigned int p, double Fp, double CRp, struct RVObjectiveFunction *fun);
     void setWrapperObject(RVDifferentialEvolution *wrapper);
+	void setTermination(RVDifferentialEvolutionShouldTerminate fun, void *data);
+	void setOnGenerationFinished(RVDifferentialEvolutionOnGenerationFinished fun, void *data);
 private:
     DifferentialEvolution(unsigned int p, double Fp, double CRp, struct RVObjectiveFunction *fun);
     struct DEImpl;

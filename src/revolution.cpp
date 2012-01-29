@@ -306,7 +306,6 @@ void RVCmaEvolutionStrategyDestroy(RVCmaEvolutionStrategy *es)
 }
 
 /*---------------------------------------------------------------------------*/
-
 extern "C"
 struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun)
 {
@@ -318,6 +317,28 @@ struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum,
         return wrapper;
     }
     return 0;
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionOnGenerationFinished fun, void *data)
+{
+	if (de)
+	{
+		DifferentialEvolution *dev = GET_WRAPPED_OBJECT(de);
+		dev->setOnGenerationFinished(fun, data);
+	}
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionShouldTerminate fun, void *data)
+{
+	if (de)
+	{
+		DifferentialEvolution *dev = GET_WRAPPED_OBJECT(de);
+		dev->setTermination(fun, data);
+	}
 }
 
 /*---------------------------------------------------------------------------*/
