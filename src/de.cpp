@@ -21,7 +21,7 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
     : Population<Atom>(p, 0, RVObjectiveFunctionGetDimensionality(fun), RVObjectiveFunctionGetNumberOfObjectives(fun)), 
       factor_(Fp), crossover_(CRp), objectiveFunction_(fun)
     {
-        
+        atom_ref = mem_ref();
     }
 	
 	void initializePopulation(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
@@ -109,16 +109,16 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
 				}
 			}
 			
-			Atom clonedAgent = *atom_ref[sz];
+			Atom clonedAgent = *(atom_ref[sz]);
 			for (int i = 0; i < dimensionality; ++i)
 			{
 				int randomIndex = rand() % dimensionality;
-				double randomUnifr = rand() / RAND_MAX;
-				if (randomUnifr < crossover_ || i == randomIndex-1)
+				double randomUnifr = rand() / (double )RAND_MAX;
+				if (randomUnifr < crossover_ || i == randomIndex)
 				{
 					// FIXME:
 					std::vector<Atom *> dAgents;
-					std::copy(dinstictAgents.begin(), dinstictAgents.end(), back_inserter(dAgents));
+					std::copy(dinstictAgents.begin(), dinstictAgents.end(), std::back_inserter(dAgents));
 					clonedAgent[i] = (*dAgents[0])[i] + factor_ * ((*dAgents[1])[i] - (*dAgents[2])[i]);
 				} else
 				{
@@ -150,8 +150,8 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
 DifferentialEvolution * DifferentialEvolution::create(unsigned int p, double Fp, double CRp, struct RVObjectiveFunction *fun)
 {
     // sanity checks:
-    bool fpValid = Fp > 0;
-    bool crpValid = CRp > 0;
+    bool fpValid = Fp > 0 && Fp < 2.0;
+    bool crpValid = CRp > 0 && CRp < 1.0;
     bool funValid = fun ? true : false;
     
     return (fpValid && crpValid && funValid) ? new DifferentialEvolution(p, Fp, CRp, fun) : 0;

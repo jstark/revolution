@@ -321,7 +321,7 @@ struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum,
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVDifferentialEvolutionSetPopulationInitializationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
+void RVDifferentialEvolutionInitializePopulation(struct RVDifferentialEvolution *de, RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
 {
 	if (de)
 	{
