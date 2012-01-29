@@ -37,6 +37,16 @@ void Atom::eval(const revolution::ObjectiveFunction& fun)
 }
 
 /*---------------------------------------------------------------------------*/
+void Atom::eval(struct RVObjectiveFunction *obj)
+{
+    struct RVArray dv = { &params[0], params.size() };
+    struct RVArray ov = { &objectives[0], params.size() };
+	void *data = RVObjectiveFunctionGetUserData(obj);
+	RVObjectiveEvaluationFun fun = RVObjectiveFunctionGetEvalFun(obj);
+	fun(&dv, &ov, data);
+}
+
+/*---------------------------------------------------------------------------*/
 double Atom::f(int index) const
 {
 	return objectives.at(index);

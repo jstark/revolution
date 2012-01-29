@@ -326,7 +326,7 @@ void RVDifferentialEvolutionSetPopulationInitializationFun(struct RVDifferential
 	if (de)
 	{
 		DifferentialEvolution *dev = GET_WRAPPED_OBJECT(de);
-		dev->setPopulationInitializationFun(fun, data);
+		dev->initializePopulation(fun, data);
 	}
 }
 

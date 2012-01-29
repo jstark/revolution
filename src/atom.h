@@ -19,6 +19,7 @@ public:
 	double& operator[](int index);
 
 	void eval(const ObjectiveFunction& fun);
+	void eval(struct RVObjectiveFunction *obj);
 	double f(int index) const;
     void constrain(RVConstrainParam fun, void *data);
 

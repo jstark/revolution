@@ -323,7 +323,7 @@ struct RVDifferentialEvolution;
 DLL_PUBLIC struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun);
 	
 typedef void (*RVDifferentialEvolutionPopulationSetInitialValues)(struct RVArray *designParams, struct RVArray *objectives, void *data);
-DLL_PUBLIC void RVDifferentialEvolutionSetPopulationInitializationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionPopulationSetInitialValues fun, void *data);
+DLL_PUBLIC void RVDifferentialEvolutionInitializePopulation(struct RVDifferentialEvolution *de, RVDifferentialEvolutionPopulationSetInitialValues fun, void *data);
 
 typedef void (*RVDifferentialEvolutionOnGenerationFinished)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
 DLL_PUBLIC void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionOnGenerationFinished fun, void *data);

@@ -13,7 +13,7 @@ public:
     void setWrapperObject(RVDifferentialEvolution *wrapper);
 	void setTermination(RVDifferentialEvolutionShouldTerminate fun, void *data);
 	void setOnGenerationFinished(RVDifferentialEvolutionOnGenerationFinished fun, void *data);
-	void setPopulationInitializationFun(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data);
+	void initializePopulation(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data);
 private:
     DifferentialEvolution(unsigned int p, double Fp, double CRp, struct RVObjectiveFunction *fun);
     struct DEImpl;

@@ -1,6 +1,7 @@
 #include "de.h"
 #include "population.h"
 #include "atom.h"
+#include <vector>
 
 using revolution::DifferentialEvolution;
 using revolution::Population;
@@ -16,10 +17,14 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
         
     }
 	
-	void setPopulationInitializationFun(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
+	void initializePopulation(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
 	{
-		populationInitFun_ = fun;
-		populationInitFunData_ = data;
+		initialize(fun, data);
+        for (std::vector<Atom *>::size_type sz = 0; sz != atom_ref.size(); ++sz)
+        {
+            //atom_ref[sz]->constrain(varConstrain, varConstrainData);
+            atom_ref[sz]->eval(objectiveFunction_);
+        }
 	}
     
     void setWrapperObject(struct RVDifferentialEvolution *wrapper)
@@ -81,8 +86,7 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
 	void *onGenFinishedData_;
 	RVDifferentialEvolutionOnGenerationFinished onGenFinished_;
 	void *evolutionShouldTerminateData_;
-	RVDifferentialEvolutionPopulationSetInitialValues populationInitFun_;
-	void *populationInitFunData_;
+	std::vector<Atom *> atom_ref;
 };
 
 /*---------------------------------------------------------------------------*/
@@ -115,9 +119,9 @@ void DifferentialEvolution::setOnGenerationFinished(RVDifferentialEvolutionOnGen
 }
 
 /*---------------------------------------------------------------------------*/
-void DifferentialEvolution::setPopulationInitializationFun(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
+void DifferentialEvolution::initializePopulation(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
 {
-	pimpl->setPopulationInitializationFun(fun, data);
+	pimpl->initializePopulation(fun, data);
 }
 
 /*---------------------------------------------------------------------------*/
