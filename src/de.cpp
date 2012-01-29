@@ -15,6 +15,12 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
     {
         
     }
+	
+	void setPopulationInitializationFun(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
+	{
+		populationInitFun_ = fun;
+		populationInitFunData_ = data;
+	}
     
     void setWrapperObject(struct RVDifferentialEvolution *wrapper)
     {
@@ -75,6 +81,8 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
 	void *onGenFinishedData_;
 	RVDifferentialEvolutionOnGenerationFinished onGenFinished_;
 	void *evolutionShouldTerminateData_;
+	RVDifferentialEvolutionPopulationSetInitialValues populationInitFun_;
+	void *populationInitFunData_;
 };
 
 /*---------------------------------------------------------------------------*/
@@ -104,6 +112,12 @@ void DifferentialEvolution::setTermination(RVDifferentialEvolutionShouldTerminat
 void DifferentialEvolution::setOnGenerationFinished(RVDifferentialEvolutionOnGenerationFinished fun, void *data)
 {
 	pimpl->setOnGenerationFinished(fun, data);
+}
+
+/*---------------------------------------------------------------------------*/
+void DifferentialEvolution::setPopulationInitializationFun(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
+{
+	pimpl->setPopulationInitializationFun(fun, data);
 }
 
 /*---------------------------------------------------------------------------*/

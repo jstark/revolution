@@ -321,6 +321,17 @@ struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum,
 
 /*---------------------------------------------------------------------------*/
 extern "C"
+void RVDifferentialEvolutionSetPopulationInitializationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
+{
+	if (de)
+	{
+		DifferentialEvolution *dev = GET_WRAPPED_OBJECT(de);
+		dev->setPopulationInitializationFun(fun, data);
+	}
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
 void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionOnGenerationFinished fun, void *data)
 {
 	if (de)
