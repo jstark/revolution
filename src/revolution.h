@@ -358,22 +358,96 @@ struct RVDifferentialEvolution;
  *	@see RVDifferentialEvolutionStart(), RVDifferentialEvolutionDestroy()
  */
 DLL_PUBLIC struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun);
-	
+
+/*! \typedef RVDifferentialEvolutionPopulationSetInitialValues(struct RVArray *designParams, struct RVArray *objectives, void *data);
+ *  \brief A function signature that calculates the initial population values. 
+ *  \param designParams the design vector of a candidate solution.
+ *  \param objectives a pointer to the objectives vector. You do not need change the objective values. The Objective function will be called automatically after the initialization function.
+ *  \param data the user data that may or may not be supplied. These are the same user data used 
+ *  during the call of RVDifferentialEvolutionInitializePopulation. 
+ *  @see RVDifferentialEvolutionInitializePopulation(), RVObjectiveFunctionCreate()
+ */
 typedef void (*RVDifferentialEvolutionPopulationSetInitialValues)(struct RVArray *designParams, struct RVArray *objectives, void *data);
+
+/* \fn void RVDifferentialEvolutionPopulationSetInitialValues(RVDifferentialEvolutionStrategy *de, RVDifferentialEvolutionSetPopulationInitialValues fun);
+ * \brief Sets a function that will be called to calculate the initial values of the population. 
+ * \param es a pointer to a differential evolution object. The function will check for a NULL value and do nothing
+ * if de is actually NULL.
+ * \param fun the function that will be called to initialize every agent of the population. The function will ignore NULL values for fun.
+ * \param data the user data that may or may not be supplied by the client. 
+ * @see RVDifferentialEvolutionPopulationSetInitialValues
+ */
 DLL_PUBLIC void RVDifferentialEvolutionInitializePopulation(struct RVDifferentialEvolution *de, RVDifferentialEvolutionPopulationSetInitialValues fun, void *data);
 
+/*! \typedef void (*RVDifferentialEvolutionOnGenerationFinished)(struct RVDifferentialEvolution *de, int gen, void *data);
+ *  \brief A function type definition for a function to be called after every generation of a
+ *  differential evolution.
+ *  @see RVDifferentialEvolutionOnGenerationFinished()
+ */
 typedef void (*RVDifferentialEvolutionOnGenerationFinished)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
+
+/* \fn void RVDifferentialEvolutionOnGenerationFinished(struct RVDifferentialEvolution *de, RVDifferentialEvolutionOnGenerationFinished fun, void *data);
+ * \brief Sets a user-supplied function to be called at the end of every evolution generation.
+ * \param es a pointer to a differential evolution. The function will check for a NULL value.
+ * \param fun the function to be called at every generation. A NULL value will be ignored.
+ * \param data the user-supplied data, if any.
+ * @see RVDifferentialEvolutionStart()
+ */
 DLL_PUBLIC void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionOnGenerationFinished fun, void *data);
 
+/* \typedef int (*RVDifferentialEvolutionShouldTerminate)(struct RVDifferentialEvolutionStrategy *de, unsigned int g, void *data);
+ * \brief A function type definition for terminating a differential evolution.
+ * \param es a pointer to a differential evolution.
+ * \param g the current generation number
+ * \param data the user-supplied data, if any
+ * \return Returns 1 if the process should terminate. 
+ * @see RVDifferentialEvolutionStrategySetTerminationFun()
+ */
 typedef int (*RVDifferentialEvolutionShouldTerminate)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
+
+/* \fn void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionShouldTerminate fun, void *data);
+ * \brief Checks if an evolution should terminate after each generation.
+ * \param es a pointer to a differential evolution. The function will check for a NULL value.
+ * \param fun the function that will actually check whether the evolution should terminate.
+ * \param data the user-supplied data, if any.
+ * @see RVDifferentialEvolutionShouldTerminate
+ */
 DLL_PUBLIC void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionShouldTerminate t, void *data);
 
+/* \fn double RVDifferentialEvolutionGetDesignParameter(struct RVDifferentialEvolution *de, int agentIndex, int paramIndex);
+ * \brief Gets the design parameter of an agent.
+ * \param de the pointer the differential evolution whose agent we want to check. The function will check for a NULL argument. 
+ * \param agentIndex the agent index. The index is 0-based, so use '0' for the first agent. 
+ * \param paramIndex the 0-based design variable index which must be less than n, the problem's dimensionality.
+ * \returnagentIndexReturns the value of the design parameter for the given index.
+ * @see RVDifferentialEvolutionStrategyGetObjective()
+ */
 DLL_PUBLIC double RVDifferentialEvolutionGetDesignParameter(struct RVDifferentialEvolution *de, int agentIndex, int paramIndex);
-	
+
+/*! double RVDifferentialEvolutionGetObjective(struct RVDifferentialEvolution *de, int agentIndex, int objIndex);
+ *  \brief Gets an objective value from an agent.
+ *  \param de the pointer the differential evolution whose agent we want to check. The function will check for a NULL  argument.
+ *  \param agentIndex the agent index. The index is 0-based, so use '0' for the first parent. 
+ *  \param objIndex the 0-based objective index which must be less than m, the problem's number of objectives.
+ *  \return Returns the value of the desired objective.
+ */
 DLL_PUBLIC double RVDifferentialEvolutionGetObjective(struct RVDifferentialEvolution *de, int agentIndex, int objectiveIndex);
-	
+
+/* \fn void RVDifferentialEvolutionStart(struct RVDifferentialEvolutionStart *de);
+ * \brief Starts an differential evolution.
+ * A started differential evolution will execute for a maximum of 1000 generations, unless some termination
+ * criteria has been set by RVDifferentialEvolutionSetTerminationFun.
+ * \param de a pointer to a differential evolution object. The function will check for a NULL argument.
+ * @see RVDifferentialEvolutionOnGenerationFinished(), RVDifferentialEvolutionSetTerminationFun()
+ */
 DLL_PUBLIC void RVDifferentialEvolutionStart(struct RVDifferentialEvolution *de);
 
+/*!	\fn void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de);
+ *	\brief Destroys a differential evolution object.
+ *	Use this function to destroy a differential evolution object and free memory.
+ *	\param de the differential evolution to be destroyed. If NULL, the function will do nothing.
+ *	@see RVDifferentialEvolutionCreate()
+*/
 DLL_PUBLIC void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de);
 
 /* preliminary support for cma algorithm */
