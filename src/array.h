@@ -3,10 +3,18 @@
 
 #include <stdlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct RVArray
 {
     double *data;
     size_t size;
 };//~ RVArray
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
