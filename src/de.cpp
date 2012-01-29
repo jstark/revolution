@@ -2,6 +2,8 @@
 #include "population.h"
 #include "atom.h"
 #include <vector>
+#include <set>
+#include <algorithm>
 
 using revolution::DifferentialEvolution;
 using revolution::Population;
@@ -75,7 +77,44 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
 	
 	void doEvolutionStep()
 	{
-		
+		const int populationSize = atom_ref.size();
+		const int dimensionality = RVObjectiveFunctionGetDimensionality(objectiveFunction_);
+		for (std::vector<Atom *>::size_type sz = 0; sz != populationSize; ++sz)
+		{
+			std::set<Atom *> dinstictAgents;
+			while (dinstictAgents.size() != 3)
+			{
+				int randomAgentIndex = rand() % populationSize;
+				if (randomAgentIndex != sz)
+				{
+					dinstictAgents.insert(atom_ref[randomAgentIndex]);
+				}
+			}
+			
+			Atom clonedAgent = *atom_ref[sz];
+			for (int i = 0; i < dimensionality; ++i)
+			{
+				int randomIndex = rand() % dimensionality;
+				double randomUnifr = rand() / RAND_MAX;
+				if (randomUnifr < crossover_ || i == randomIndex-1)
+				{
+					// FIXME:
+					std::vector<Atom *> dAgents;
+					std::copy(dinstictAgents.begin(), dinstictAgents.end(), back_inserter(dAgents));
+					clonedAgent[i] = (*dAgents[0])[i] + factor_ * ((*dAgents[1])[i] - (*dAgents[2])[i]);
+				} else
+				{
+					clonedAgent[i] = (*atom_ref[sz])[i];
+				}
+			}
+			
+			clonedAgent.eval(objectiveFunction_);
+			if (clonedAgent.f(0) < atom_ref[sz]->f(0)) // FIXME: hardcoded ONE objective ONLY
+			{
+				atom_ref[sz]->swap(clonedAgent);
+			}
+			
+		}
 	}
     
     double factor_;
