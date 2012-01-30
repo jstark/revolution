@@ -4,13 +4,14 @@
 #include "gtest/gtest.h"
 #include "objective_function.h"
 #include "atom.h"
+#include "array.h"
 
 namespace 
 {
-    int eval(const double *params, double *obj, void *data)
+    int eval(const struct RVArray *params, struct RVArray *obj, void *data)
     {
-        obj[0] = 1.0;
-        obj[1] = 2.0;
+        RVArraySetElementAtIndex(obj, 0, 1.0);
+        RVArraySetElementAtIndex(obj, 1, 2.0);
         return 0;
     }
 

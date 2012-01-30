@@ -4,6 +4,7 @@
 #include "gtest/gtest.h"
 #include "population.h"
 #include "atom.h"
+#include "array.h"
 #include <vector>
 
 namespace 
@@ -13,11 +14,11 @@ namespace
 #define DIM 2
 #define OBJ 1
 
-    void init(double *params, double *objectives, void *data)
+    void init(struct RVArray *params, struct RVArray *objectives, void *data)
     {
         for (int i = 0; i < DIM; ++i)
         {
-            params[i] = i;
+            RVArraySetElementAtIndex(params, i, i);
         }
     }
 

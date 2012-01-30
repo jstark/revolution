@@ -4,6 +4,7 @@
 #include "gtest/gtest.h"
 #include "atom.h"
 #include "objective_function.h"
+#include "array.h"
 #include <limits>
 
 namespace 
@@ -49,18 +50,20 @@ namespace
 
             revolution::ObjectiveFunction *sphere3;
 
-            static int sphere3_eval(const double *params, double *obj, void *data)
+            static int sphere3_eval(const struct RVArray *params, struct RVArray *obj, void *data)
             {
-                double x = params[0], y = params[1], z = params[2];
-                obj[0] = x*x + y*y + z*z;
+                double x = RVArrayGetElementAtIndex(params, 0);
+				double y = RVArrayGetElementAtIndex(params, 1);
+				double z = RVArrayGetElementAtIndex(params, 2);
+                RVArraySetElementAtIndex(obj, 0, x*x + y*y + z*z);
                 return 0;
             }
 
-            static void init(double *params, double *obj, void *data)
+            static void init(struct RVArray *params, struct RVArray *obj, void *data)
             {
-                params[0] = 1.0;
-                params[1] = 2.0;
-                params[2] = 3.0;
+                RVArraySetElementAtIndex(params, 0, 1.0);
+                RVArraySetElementAtIndex(params, 1, 2.0);
+                RVArraySetElementAtIndex(params, 2, 3.0);
             }
     };
 
