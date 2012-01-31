@@ -3,6 +3,7 @@
 #include "ut_objective_function.h"
 #include "ut_version.h"
 #include "ut_basic_es.h"
+#include "ut_de.h"
 #include "gtest/gtest.h"
 
 int main(int argc, char *argv[])

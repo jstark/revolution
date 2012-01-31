@@ -150,11 +150,12 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
 DifferentialEvolution * DifferentialEvolution::create(unsigned int p, double Fp, double CRp, struct RVObjectiveFunction *fun)
 {
     // sanity checks:
+	bool pValid = p >= 4;
     bool fpValid = Fp > 0 && Fp < 2.0;
     bool crpValid = CRp > 0 && CRp < 1.0;
     bool funValid = fun ? true : false;
     
-    return (fpValid && crpValid && funValid) ? new DifferentialEvolution(p, Fp, CRp, fun) : 0;
+    return (pValid && fpValid && crpValid && funValid) ? new DifferentialEvolution(p, Fp, CRp, fun) : 0;
 }
 
 /*---------------------------------------------------------------------------*/

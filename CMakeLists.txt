@@ -32,7 +32,8 @@ set (UNIT_TEST_HEADERS
 	${CMAKE_SOURCE_DIR}/unit-tests/ut_basic_es.h
 	${CMAKE_SOURCE_DIR}/unit-tests/ut_objective_function.h
 	${CMAKE_SOURCE_DIR}/unit-tests/ut_atom.h
-	${CMAKE_SOURCE_DIR}/unit-tests/ut_population.h)
+	${CMAKE_SOURCE_DIR}/unit-tests/ut_population.h
+    ${CMAKE_SOURCE_DIR}/unit-tests/ut_de.h)
 	
 
 set(COMMON_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin)
