@@ -6,6 +6,7 @@ set (CMAKE_CXX_FLAGS_DEBUG "-g -Wall")
 
 set (HEADERS 
 	${CMAKE_SOURCE_DIR}/src/revolution.h
+    ${CMAKE_SOURCE_DIR}/src/basic_es.h
 	${CMAKE_SOURCE_DIR}/src/version.h
 	${CMAKE_SOURCE_DIR}/src/objective_function.h
 	${CMAKE_SOURCE_DIR}/src/atom.h
@@ -16,6 +17,7 @@ set (HEADERS
 
 set (SOURCES 
 	${CMAKE_SOURCE_DIR}/src/revolution.cpp
+    ${CMAKE_SOURCE_DIR}/src/basic_es.cpp
 	${CMAKE_SOURCE_DIR}/src/version.cpp
 	${CMAKE_SOURCE_DIR}/src/objective_function.cpp
 	${CMAKE_SOURCE_DIR}/src/atom.cpp
@@ -23,14 +25,14 @@ set (SOURCES
 	${CMAKE_SOURCE_DIR}/src/de.cpp)
 		
 set (UNIT_TEST_SOURCES
-	${CMAKE_SOURCE_DIR}/unit_test/unit_test.cpp)
+	${CMAKE_SOURCE_DIR}/unit-tests/unit_test.cpp)
 	
 set (UNIT_TEST_HEADERS
-	${CMAKE_SOURCE_DIR}/unit_test/ut_version.h
-	${CMAKE_SOURCE_DIR}/unit_test/ut_basic.h
-	${CMAKE_SOURCE_DIR}/unit_test/ut_objective_function.h
-	${CMAKE_SOURCE_DIR}/unit_test/ut_atom.h
-	${CMAKE_SOURCE_DIR}/unit_test/ut_population.h)
+	${CMAKE_SOURCE_DIR}/unit-tests/ut_version.h
+	${CMAKE_SOURCE_DIR}/unit-tests/ut_basic_es.h
+	${CMAKE_SOURCE_DIR}/unit-tests/ut_objective_function.h
+	${CMAKE_SOURCE_DIR}/unit-tests/ut_atom.h
+	${CMAKE_SOURCE_DIR}/unit-tests/ut_population.h)
 	
 
 set(COMMON_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/bin)
