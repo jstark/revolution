@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include <algorithm>
+#include <iterator>
 
 using revolution::DifferentialEvolution;
 using revolution::Population;

@@ -55,13 +55,13 @@ double Atom::f(int index) const
 /*---------------------------------------------------------------------------*/
 int Atom::dim() const
 {
-	return params.size();
+	return static_cast<int>(params.size());
 }
 
 /*---------------------------------------------------------------------------*/
 int Atom::obj() const
 {
-	return objectives.size();
+	return static_cast<int>(objectives.size());
 }
 
 /*---------------------------------------------------------------------------*/

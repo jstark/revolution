@@ -2,6 +2,7 @@
 #include "objective_function.h"
 
 using revolution::CmaEs;
+using revolution::ObjectiveFunction;
 
 class CmaEs::CmaEsPriv
 {
