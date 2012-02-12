@@ -151,7 +151,7 @@ public:
 		setRNG(0, 0);
 	}
 
-	void setRNG(RVRandom f, void *d)
+	void setRNG(RV_RANDOM_FUNCTION f, void *d)
 	{
 		if (f)
 		{
@@ -182,7 +182,7 @@ public:
 		}
 	}
 
-	RVRandom rng;
+	RV_RANDOM_FUNCTION rng;
 	void *data;
 
 };//~ Mutation
@@ -246,7 +246,7 @@ public:
 		set_ref();
 	}
 
-	void setPopulationInitialValues(RVPopulationSetInitialValues fun, void *data)
+	void setPopulationInitialValues(RV_SET_INITIAL_VALUES_FUNCTION fun, void *data)
 	{
 		initialize(fun, data);
         for (std::vector< ::Atom *>::size_type sz = 0; sz != mu; ++sz)
@@ -256,13 +256,13 @@ public:
         }
 	}
 
-	void setOnGenerationFinished(RVGenerationFinished fun, void *data)
+	void setOnGenerationFinished(RV_BASIC_GENERATION_FINISHED_FUNCTION fun, void *data)
 	{
 		onGenFinished = fun;
 		onGenFinishedData = data;
 	}
 
-	void setEvolutionShouldTerminate(RVEvolutionShouldTerminate fun, void *data)
+	void setEvolutionShouldTerminate(RV_BASIC_SHOULD_TERMINATE_FUNCTION fun, void *data)
 	{
 		evolutionShouldTerminate = fun;
 		evolutionShouldTerminateData = data;
@@ -325,12 +325,12 @@ public:
 		wrapperObj = obj;
 	}
 
-	void setRNG(RVRandom fun, void *data)
+	void setRNG(RV_RANDOM_FUNCTION fun, void *data)
 	{
 		mutation.setRNG(fun, data);
 	}
 
-	void setParamConstraints(RVConstrainParam fun, void *data)
+	void setParamConstraints(RV_CONSTRAIN_PARAMS_FUNCTION fun, void *data)
 	{
         varConstrain = fun;
         varConstrainData = data;
@@ -349,12 +349,12 @@ public:
 	ObjectiveFunction *objectiveFunction;
 	const unsigned int mu;
 	const unsigned int lambda;
-	RVGenerationFinished onGenFinished;
+	RV_BASIC_GENERATION_FINISHED_FUNCTION onGenFinished;
 	void *onGenFinishedData;
-	RVEvolutionShouldTerminate evolutionShouldTerminate;
+	RV_BASIC_SHOULD_TERMINATE_FUNCTION evolutionShouldTerminate;
 	void *evolutionShouldTerminateData;
 	RVBasicEvolutionStrategy *wrapperObj;
-    RVConstrainParam varConstrain;
+    RV_CONSTRAIN_PARAMS_FUNCTION varConstrain;
     void *varConstrainData;
 };//~BasicEs::BasicEsPriv
 
@@ -373,7 +373,7 @@ BasicEs::~BasicEs()
 }
 
 /*--------------------------------------------------------------------------*/
-void BasicEs::setPopulationInitialValues(RVPopulationSetInitialValues fun, void *data)
+void BasicEs::setPopulationInitialValues(RV_SET_INITIAL_VALUES_FUNCTION fun, void *data)
 {
 	impl->setPopulationInitialValues(fun, data);
 }
@@ -385,13 +385,13 @@ void BasicEs::start()
 }
 
 /*--------------------------------------------------------------------------*/
-void BasicEs::setOnGenerationFinished(RVGenerationFinished fun, void *data)
+void BasicEs::setOnGenerationFinished(RV_BASIC_GENERATION_FINISHED_FUNCTION fun, void *data)
 {
 	impl->setOnGenerationFinished(fun, data);
 }
 
 /*--------------------------------------------------------------------------*/
-void BasicEs::setTerminationCriteria(RVEvolutionShouldTerminate fun, void *data)
+void BasicEs::setTerminationCriteria(RV_BASIC_SHOULD_TERMINATE_FUNCTION fun, void *data)
 {
 	impl->setEvolutionShouldTerminate(fun, data);
 }
@@ -415,13 +415,13 @@ void BasicEs::setWrapperObject(RVBasicEvolutionStrategy *obj)
 }
 
 /*--------------------------------------------------------------------------*/
-void BasicEs::setRNG(RVRandom fun, void *data)
+void BasicEs::setRNG(RV_RANDOM_FUNCTION fun, void *data)
 {
 	impl->setRNG(fun, data);
 }
 
 /*--------------------------------------------------------------------------*/
-void BasicEs::setParamConstraints(RVConstrainParam fun, void *data)
+void BasicEs::setParamConstraints(RV_CONSTRAIN_PARAMS_FUNCTION fun, void *data)
 {
     impl->setParamConstraints(fun, data);
 }

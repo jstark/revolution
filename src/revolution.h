@@ -115,7 +115,7 @@ DLL_PUBLIC void RVArraySetElementAtIndex(struct RVArray *array, size_t index, do
  */
 struct RVObjectiveFunction;
 
-/*! \typedef int (*RVObjectiveEvaluationFun(struct RVArray *const dv, struct RVArray *obj, void *data);
+/*! \typedef int (*RV_OBJECTIVE_EVALUATION_FUNCTION(const struct RVArray * dv, struct RVArray *obj, void *data);
  *  \brief A function signature that evaluates a design vector.
  *  This function is called in every generation to evaluate each population atom.
  *  \param dv a pointer to an RVArray of the design parameters.
@@ -124,9 +124,9 @@ struct RVObjectiveFunction;
  *  objective function object.
  *  @see RVObjectiveFunctionCreate()
  */
-typedef int (*RVObjectiveEvaluationFun)(const struct RVArray* dv, struct RVArray *obj, void *data);
+typedef int (*RV_OBJECTIVE_EVALUATION_FUNCTION)(const struct RVArray* dv, struct RVArray *obj, void *data);
 
-/*! \fn RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvaluationFun fun, void *data);
+/*! \fn RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RV_OBJECTIVE_EVALUATION_FUNCTION fun, void *data);
  *  \brief Creates an object that defines an optimization problem.
  *  All objects created by this function should be destroyed by RVObjectiveFunctionDestroy(). 
  *  \param dim the dimensionality of the problem, which must be greater or equal to 1.
@@ -137,41 +137,41 @@ typedef int (*RVObjectiveEvaluationFun)(const struct RVArray* dv, struct RVArray
  *  initialize a RVBasicEvolutionStrategy. The function returns NULL if any of the parameters were invalid. 
  *  @see RVBasicEvolutionStrategyCreate(), RVObjectiveFunctionDestroy()
  */
-DLL_PUBLIC struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RVObjectiveEvaluationFun fun, void *data);
+DLL_PUBLIC struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objectives, RV_OBJECTIVE_EVALUATION_FUNCTION fun, void *data);
 
-/*! \fn int RVObjectiveFunctionGetDimensionality(struct RVObjectiveFunction *f)
+/*! \fn int RVObjectiveFunctionGetDimensionality(struct RVObjectiveFunction *obf)
  *	\brief Gets the dimensionality <i>n</i> for the given objective function.
- *	\param f an objective function object.
+ *	\param obf an objective function object.
  *	\return the dimensionality
  *	@see RVObjectiveFunctionCreate(), RVObjectiveFunctionGetNumberOfObjectives()
  */
-DLL_PUBLIC int RVObjectiveFunctionGetDimensionality(struct RVObjectiveFunction *f);
+DLL_PUBLIC int RVObjectiveFunctionGetDimensionality(struct RVObjectiveFunction *obf);
 
-/*! \fn int RVObjectiveFunctionGetNumberOfObjectives(struct RVObjectiveFunction *f)
+/*! \fn int RVObjectiveFunctionGetNumberOfObjectives(struct RVObjectiveFunction *obf)
  *	\brief Gets the number of objectives <i>m</i> of the given objective function.
- *	\param f an objective function object.
+ *	\param obf an objective function object.
  *	\return the number of objectives
  *	@see RVObjectiveFunctionCreate(), RVObjectiveFunctionGetDimmensionality()
  */
-DLL_PUBLIC int RVObjectiveFunctionGetNumberOfObjectives(struct RVObjectiveFunction *f);
+DLL_PUBLIC int RVObjectiveFunctionGetNumberOfObjectives(struct RVObjectiveFunction *obf);
 
-/*!	\fn RVObjectiveEvaluationFun RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *f)
- *	\brief Gets the evaluation function from for the given objective function object.
- *	\param f an objective function object
- *	\return the evaluation function
- *	@see RVObjectiveFunctionCreate()
- */
-DLL_PUBLIC RVObjectiveEvaluationFun RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *f);
-    
-/*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *object)
+/*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *obf)
  *	\brief Gets the user data from an objective function object.
- *	\param f an objective function object.
+ *	\param obf an objective function object.
  *	\return the user data, if any, or NULL.
  *	@see RVObjectiveFunctionCreate()
  */
-DLL_PUBLIC void * RVObjectiveFunctionGetUserData(struct RVObjectiveFunction *f);
+DLL_PUBLIC void * RVObjectiveFunctionGetUserData(struct RVObjectiveFunction *obf);
+	
+/*! \fn RV_OBJECTIVE_EVALUATION_FUNCTION RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *obf);
+ *  \brief Gets the evaluation function.
+ *  \param obf an objective function object.
+ *  \return the evaluation function of type RV_OBJECTIVE_EVALUATION_FUNCTION
+ *  @see RVObjectiveFunctionCreate()
+ */
+DLL_PUBLIC RV_OBJECTIVE_EVALUATION_FUNCTION RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *obf);
 
-/*! \fn void RVObjectiveFunctionDestroy(RVObjectiveFunction *object);
+/*! \fn void RVObjectiveFunctionDestroy(struct RVObjectiveFunction *obf);
  *  \brief Destroys an RVObjectiveFunction object.
  *  \param obf a pointer to an object created by RVObjectiveFunctionCreate(). The argument 
  *  can be NULL, in which case the function does nothing.
@@ -213,7 +213,7 @@ enum RVSelectionMode
  */
 DLL_PUBLIC struct RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho, int lambda, enum RVSelectionMode mode, struct RVObjectiveFunction *fun);
 
-/*! \typedef RVPopulationSetInitialValues(struct RVArray *designParams, struct RVArray *objectives, void *data);
+/*! \typedef RV_SET_INITIAL_VALUES_FUNCTION(struct RVArray *designParams, struct RVArray *objectives, void *data);
  *  \brief A function signature that calculates the initial population values. 
  *  \param designParams the design vector of a candidate solution.
  *  \param objectives a pointer to the objectives vector. You do not need change the objective values. The Objective function will be called automatically after the initialization function.
@@ -221,7 +221,7 @@ DLL_PUBLIC struct RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int m
  *  during the call of RVBasicEvolutionStrategyInitializePopulation. 
  *  @see RVBasicEvolutionStrategyInitializePopulation(), RVObjectiveFunctionCreate()
  */
-typedef void (*RVPopulationSetInitialValues)(struct RVArray *designParams, struct RVArray *objectives, void *data);
+typedef void (*RV_SET_INITIAL_VALUES_FUNCTION)(struct RVArray *designParams, struct RVArray *objectives, void *data);
 
 /* \fn void RVBasicEvolutionStrategyPopulationSetInitialValues(RVBasicEvolutionStrategy *es, RVSetPopulationInitialValues fun);
  * \brief Sets a function that will be called to calculate the initial values of the population. 
@@ -229,17 +229,17 @@ typedef void (*RVPopulationSetInitialValues)(struct RVArray *designParams, struc
  * if es is actually NULL.
  * \param fun the function that will be called to initialize every atom of the population. The function will ignore * NULL values for fun.
  * \param data the user data that may or may not be supplied by the client. 
- * @see RVPopulationSetInitialValues
+ * @see RV_SET_INITIAL_VALUES_FUNCTION
  */
-DLL_PUBLIC void RVBasicEvolutionStrategyInitializePopulation(struct RVBasicEvolutionStrategy *es, RVPopulationSetInitialValues fun, void *data);
+DLL_PUBLIC void RVBasicEvolutionStrategyInitializePopulation(struct RVBasicEvolutionStrategy *es, RV_SET_INITIAL_VALUES_FUNCTION fun, void *data);
 
-/*! \typedef void (*RVConstrainParam)(struct RVArray *dv, void *data);
+/*! \typedef void (*RV_CONSTRAIN_PARAMS_FUNCTION)(struct RVArray *dv, void *data);
  *  \brief A function type definition to constrain design params. 
  *  @see RVBasicEvolutionStrategySetParameterConstraints()
  */
-typedef void (*RVConstrainParam)(struct RVArray *designParam, void *data);
+typedef void (*RV_CONSTRAIN_PARAMS_FUNCTION)(struct RVArray *designParam, void *data);
 
-/*! \fn void RVBasicEvolutionStrategySetParameterConstraints(struct RVBasicEvolutionStrategy *es, RVConstrainParam fun, void *data);
+/*! \fn void RVBasicEvolutionStrategySetParameterConstraints(struct RVBasicEvolutionStrategy *es, RV_CONSTRAIN_PARAMS_FUNCTION fun, void *data);
  *  \brief Sets a function to be called before an atom's objectives are evaluated. 
  *  Use this function with caution. Only the design variables can be constrained, and you should
  *  have in mind that the endogenous strategy parameters assume that no constraining will happen. You can avoid 
@@ -247,9 +247,9 @@ typedef void (*RVConstrainParam)(struct RVArray *designParam, void *data);
  *  \param es a pointer to a basic evolution strategy. The function will check for a NULL value.
  *  \param fun the function that will constrain the design params of an atom. It will be checked for NULL.
  *  \param data the user-supplied data, if any.
- *  @see RVConstrainParam()
+ *  @see RV_CONSTRAIN_PARAMS_FUNCTION
  */
-DLL_PUBLIC void RVBasicEvolutionStrategySetParameterConstraints(struct RVBasicEvolutionStrategy *es, RVConstrainParam fun, void *data);
+DLL_PUBLIC void RVBasicEvolutionStrategySetParameterConstraints(struct RVBasicEvolutionStrategy *es, RV_CONSTRAIN_PARAMS_FUNCTION fun, void *data);
 
 /* \fn void RVBasicEvolutionStrategyStart(struct RVBasicEvolutionStrategy *es);
  * \brief Starts an evolution strategy
@@ -260,23 +260,23 @@ DLL_PUBLIC void RVBasicEvolutionStrategySetParameterConstraints(struct RVBasicEv
  */
 DLL_PUBLIC void RVBasicEvolutionStrategyStart(struct RVBasicEvolutionStrategy *es);
 
-/*! \typedef void (*RVGenerationFinished)(RVBasicEvolutionStrategy *es, int gen, void *data);
+/*! \typedef void (*RV_BASIC_GENERATION_FINISHED_FUN)(RVBasicEvolutionStrategy *es, int gen, void *data);
  *  \brief A function type definition for a function to be called after every generation of a
  *  basic evolution strategy.
  *  @see RVBasicEvolutionStrategyOnGenerationFinished()
  */
-typedef void (*RVGenerationFinished)(struct RVBasicEvolutionStrategy *es, int gen, void *data);
+typedef void (*RV_BASIC_GENERATION_FINISHED_FUNCTION)(struct RVBasicEvolutionStrategy *es, int gen, void *data);
 
-/* \fn void RVBasicEvolutionOnGenerationFinished(struct RVBasicEvolutionStrategy *es, RVGenerationFinished fun, void *data);
+/* \fn void RVBasicEvolutionOnGenerationFinished(struct RVBasicEvolutionStrategy *es, RV_BASIC_GENERATION_FINISHED_FUNCTION fun, void *data);
  * \brief Sets a user-supplied function to be called at the end of every evolution generation.
  * \param es a pointer to a basic evolution strategy. The function will check for a NULL value.
  * \param fun the function to be called at every generation. A NULL value will be ignored.
  * \param data the user-supplied data, if any.
  * @see RVBasicEvolutionStrategyStart()
  */
-DLL_PUBLIC void RVBasicEvolutionStrategyOnGenerationFinished(struct RVBasicEvolutionStrategy *es, RVGenerationFinished fun, void *data);
+DLL_PUBLIC void RVBasicEvolutionStrategyOnGenerationFinished(struct RVBasicEvolutionStrategy *es, RV_BASIC_GENERATION_FINISHED_FUNCTION fun, void *data);
 
-/* \typedef int (*RVEvolutionShouldTerminate)(struct RVBasicEvolutionStrategy *es, unsigned int g, void *data);
+/* \typedef int (*RV_BASIC_SHOULD_TERMINATE_FUNCTION)(struct RVBasicEvolutionStrategy *es, unsigned int g, void *data);
  * \brief A function type definition for terminating a basic evolution strategy.
  * \param es a pointer to a basic evolution strategy.
  * \param g the current generation number
@@ -284,16 +284,16 @@ DLL_PUBLIC void RVBasicEvolutionStrategyOnGenerationFinished(struct RVBasicEvolu
  * \return Returns 1 if the process should terminate. 
  * @see RVBasicEvolutionStrategySetTerminationCriteria()
  */
-typedef int (*RVEvolutionShouldTerminate)(struct RVBasicEvolutionStrategy *es, unsigned int g, void *data);
+typedef int (*RV_BASIC_SHOULD_TERMINATE_FUNCTION)(struct RVBasicEvolutionStrategy *es, unsigned int g, void *data);
 
-/* \fn void RVBasicEvolutionStrategySetTerminationCriteria(struct RVBasicEvolutionStrategy *es, RVEvolutionShouldTerminate fun, void *data);
+/* \fn void RVBasicEvolutionStrategySetTerminationCriteria(struct RVBasicEvolutionStrategy *es, RV_BASIC_SHOULD_TERMINATE_FUNCTION fun, void *data);
  * \brief Checks if an evolution should terminate after each generation.
  * \param es a pointer to a basic evolution strategy. The function will check for a NULL value.
  * \param fun the function that will actually check whether the evolution should terminate.
  * \param data the user-supplied data, if any.
- * @see RVEvolutionShouldTerminate
+ * @see RV_BASIC_SHOULD_TERMINATE_FUNCTION
  */
-DLL_PUBLIC void RVBasicEvolutionStrategySetTerminationCriteria(struct RVBasicEvolutionStrategy *es, RVEvolutionShouldTerminate fun, void *data);
+DLL_PUBLIC void RVBasicEvolutionStrategySetTerminationCriteria(struct RVBasicEvolutionStrategy *es, RV_BASIC_SHOULD_TERMINATE_FUNCTION fun, void *data);
 
 /* \fn double RVBasicEvolutionStrategyGetDesignParameter(struct RVBasicEvolutionStrategy *es, int parent, int paramIndex);
  * \brief Gets the design parameter of a parent atom.
@@ -314,25 +314,25 @@ DLL_PUBLIC double RVBasicEvolutionStrategyGetDesignParameter(struct RVBasicEvolu
  */
 DLL_PUBLIC double RVBasicEvolutionStrategyGetObjective(struct RVBasicEvolutionStrategy *es, int parent, int objIndex);
 
-/*! \typedef double (*RVRandom)(void *data);
+/*! \typedef double (*RV_RANDOM_FUNCTION)(void *data);
  *  \brief A function type definition to generate a random number.
  *  The random number generated should follow a normal distribution with a 0-mean and a unit variance.
  *  \param data the user-supplied data, if any.
  *  \return Returns a random number from a normal distribution with zero mean and unit variance.
  *  @see RVBasicEvolutionStrategySetRNG()
  */
-typedef double (*RVRandom)(void *data);
+typedef double (*RV_RANDOM_FUNCTION)(void *data);
 
-/*! \fn void RVBasicEvolutionStrategySetRNG(struct RVBasicEvolutionStrategy *es, RVRandom fun, void *data);
+/*! \fn void RVBasicEvolutionStrategySetRNG(struct RVBasicEvolutionStrategy *es, RV_RANDOM_FUNCTION fun, void *data);
  *  \brief Sets an external random number generator to be used by an evolution process.
  *  You can use this function to change the internal random number generator. The internal generator is based
  *  on rand(), which is not a very good RNG. 
  *  \param es the basic evolution strategy to use the external random number generator.
  *  \param fun the function that will generate a random number.
  *  \param data the user-supplied data, if any.
- *  @see RVRandom
+ *  @see RV_RANDOM_FUNCTION
  */
-DLL_PUBLIC void RVBasicEvolutionStrategySetRNG(struct RVBasicEvolutionStrategy *es, RVRandom fun, void *data);
+DLL_PUBLIC void RVBasicEvolutionStrategySetRNG(struct RVBasicEvolutionStrategy *es, RV_RANDOM_FUNCTION fun, void *data);
 
 /*! \fn void RVBasicEvolutionStrategyDestroy(struct RVBasicEvolutionStrategy *es);
  *  \brief Destroys an RVBasicEvolutionStrategy objects and frees memory.
@@ -359,60 +359,49 @@ struct RVDifferentialEvolution;
  */
 DLL_PUBLIC struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun);
 
-/*! \typedef RVDifferentialEvolutionPopulationSetInitialValues(struct RVArray *designParams, struct RVArray *objectives, void *data);
- *  \brief A function signature that calculates the initial population values. 
- *  \param designParams the design vector of a candidate solution.
- *  \param objectives a pointer to the objectives vector. You do not need change the objective values. The Objective function will be called automatically after the initialization function.
- *  \param data the user data that may or may not be supplied. These are the same user data used 
- *  during the call of RVDifferentialEvolutionInitializePopulation. 
- *  @see RVDifferentialEvolutionInitializePopulation(), RVObjectiveFunctionCreate()
- */
-typedef void (*RVDifferentialEvolutionPopulationSetInitialValues)(struct RVArray *designParams, struct RVArray *objectives, void *data);
-
-/* \fn void RVDifferentialEvolutionPopulationSetInitialValues(RVDifferentialEvolutionStrategy *de, RVDifferentialEvolutionSetPopulationInitialValues fun);
+/* \fn void RVDifferentialEvolutionInitializePopulation(RVDifferentialEvolutionStrategy *de, RV_SET_INITIAL_VALUES_FUNCTION fun);
  * \brief Sets a function that will be called to calculate the initial values of the population. 
  * \param es a pointer to a differential evolution object. The function will check for a NULL value and do nothing
  * if de is actually NULL.
  * \param fun the function that will be called to initialize every agent of the population. The function will ignore NULL values for fun.
  * \param data the user data that may or may not be supplied by the client. 
- * @see RVDifferentialEvolutionPopulationSetInitialValues
+ * @see RV_SET_INITIAL_VALUES_FUNCTION
  */
-DLL_PUBLIC void RVDifferentialEvolutionInitializePopulation(struct RVDifferentialEvolution *de, RVDifferentialEvolutionPopulationSetInitialValues fun, void *data);
+DLL_PUBLIC void RVDifferentialEvolutionInitializePopulation(struct RVDifferentialEvolution *de, RV_SET_INITIAL_VALUES_FUNCTION fun, void *data);
 
-/*! \typedef void (*RVDifferentialEvolutionOnGenerationFinished)(struct RVDifferentialEvolution *de, int gen, void *data);
+/*! \typedef void (*RV_DE_GENERATION_FINISHED_FUNCTION)(struct RVDifferentialEvolution *de, int gen, void *data);
  *  \brief A function type definition for a function to be called after every generation of a
  *  differential evolution.
- *  @see RVDifferentialEvolutionOnGenerationFinished()
+ *  @see RVDifferentialEvolutionSetOnGenerationFinishedFun()
  */
-typedef void (*RVDifferentialEvolutionOnGenerationFinished)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
+typedef void (*RV_DE_GENERATION_FINISHED_FUNCTION)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
 
-/* \fn void RVDifferentialEvolutionOnGenerationFinished(struct RVDifferentialEvolution *de, RVDifferentialEvolutionOnGenerationFinished fun, void *data);
+/* \fn void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RV_DE_GENERATION_FINISHED_FUNCTION fun, void *data);
  * \brief Sets a user-supplied function to be called at the end of every evolution generation.
  * \param es a pointer to a differential evolution. The function will check for a NULL value.
  * \param fun the function to be called at every generation. A NULL value will be ignored.
  * \param data the user-supplied data, if any.
  * @see RVDifferentialEvolutionStart()
  */
-DLL_PUBLIC void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionOnGenerationFinished fun, void *data);
+DLL_PUBLIC void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RV_DE_GENERATION_FINISHED_FUNCTION fun, void *data);
 
-/* \typedef int (*RVDifferentialEvolutionShouldTerminate)(struct RVDifferentialEvolutionStrategy *de, unsigned int g, void *data);
+/* \typedef int (*RV_DE_SHOULD_TERMINATE_FUNCTION)(struct RVDifferentialEvolutionStrategy *de, unsigned int g, void *data);
  * \brief A function type definition for terminating a differential evolution.
  * \param es a pointer to a differential evolution.
  * \param g the current generation number
  * \param data the user-supplied data, if any
  * \return Returns 1 if the process should terminate. 
- * @see RVDifferentialEvolutionStrategySetTerminationFun()
+ * @see RVDifferentialEvolutionSetTerminationFun()
  */
-typedef int (*RVDifferentialEvolutionShouldTerminate)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
+typedef int (*RV_DE_SHOULD_TERMINATE_FUNCTION)(struct RVDifferentialEvolution *de, unsigned int generation, void *data);
 
-/* \fn void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionShouldTerminate fun, void *data);
+/* \fn void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RV_DE_SHOULD_TERMINATE_FUNCTION fun, void *data);
  * \brief Checks if an evolution should terminate after each generation.
  * \param es a pointer to a differential evolution. The function will check for a NULL value.
  * \param fun the function that will actually check whether the evolution should terminate.
  * \param data the user-supplied data, if any.
- * @see RVDifferentialEvolutionShouldTerminate
  */
-DLL_PUBLIC void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionShouldTerminate t, void *data);
+DLL_PUBLIC void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RV_DE_SHOULD_TERMINATE_FUNCTION fun, void *data);
 
 /* \fn double RVDifferentialEvolutionGetDesignParameter(struct RVDifferentialEvolution *de, int agentIndex, int paramIndex);
  * \brief Gets the design parameter of an agent.
@@ -431,7 +420,7 @@ DLL_PUBLIC double RVDifferentialEvolutionGetDesignParameter(struct RVDifferentia
  *  \param objIndex the 0-based objective index which must be less than m, the problem's number of objectives.
  *  \return Returns the value of the desired objective.
  */
-DLL_PUBLIC double RVDifferentialEvolutionGetObjective(struct RVDifferentialEvolution *de, int agentIndex, int objectiveIndex);
+DLL_PUBLIC double RVDifferentialEvolutionGetObjective(struct RVDifferentialEvolution *de, int agentIndex, int objIndex);
 
 /* \fn void RVDifferentialEvolutionStart(struct RVDifferentialEvolutionStart *de);
  * \brief Starts an differential evolution.

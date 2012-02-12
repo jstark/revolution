@@ -25,7 +25,7 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
         atom_ref = mem_ref();
     }
 	
-	void initializePopulation(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
+	void initializePopulation(RV_SET_INITIAL_VALUES_FUNCTION fun, void *data)
 	{
 		initialize(fun, data);
         for (std::vector<Atom *>::size_type sz = 0; sz != atom_ref.size(); ++sz)
@@ -40,13 +40,13 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
         wrapper_ = wrapper;
     }
 	
-	void setOnGenerationFinished(RVDifferentialEvolutionOnGenerationFinished fun, void *data)
+	void setOnGenerationFinished(RV_DE_GENERATION_FINISHED_FUNCTION fun, void *data)
 	{
 		onGenFinished_ = fun;
 		onGenFinishedData_ = data;
 	}
 	
-	void setTermination(RVDifferentialEvolutionShouldTerminate fun, void *data)
+	void setTermination(RV_DE_SHOULD_TERMINATE_FUNCTION fun, void *data)
 	{
 		evolutionShouldTerminate_ = fun;
 		evolutionShouldTerminateData_ = data;
@@ -140,9 +140,9 @@ struct DifferentialEvolution::DEImpl : private Population<Atom>
     double crossover_;
     struct RVObjectiveFunction *objectiveFunction_;
     struct RVDifferentialEvolution *wrapper_;
-	RVDifferentialEvolutionShouldTerminate evolutionShouldTerminate_;
+	RV_DE_SHOULD_TERMINATE_FUNCTION evolutionShouldTerminate_;
 	void *onGenFinishedData_;
-	RVDifferentialEvolutionOnGenerationFinished onGenFinished_;
+	RV_DE_GENERATION_FINISHED_FUNCTION onGenFinished_;
 	void *evolutionShouldTerminateData_;
 	std::vector<Atom *> atom_ref;
 };
@@ -166,19 +166,19 @@ void DifferentialEvolution::setWrapperObject(struct RVDifferentialEvolution *wra
 }
 
 /*---------------------------------------------------------------------------*/
-void DifferentialEvolution::setTermination(RVDifferentialEvolutionShouldTerminate fun, void *data)
+void DifferentialEvolution::setTermination(RV_DE_SHOULD_TERMINATE_FUNCTION fun, void *data)
 {
 	pimpl->setTermination(fun, data);
 }
 
 /*---------------------------------------------------------------------------*/
-void DifferentialEvolution::setOnGenerationFinished(RVDifferentialEvolutionOnGenerationFinished fun, void *data)
+void DifferentialEvolution::setOnGenerationFinished(RV_DE_GENERATION_FINISHED_FUNCTION fun, void *data)
 {
 	pimpl->setOnGenerationFinished(fun, data);
 }
 
 /*---------------------------------------------------------------------------*/
-void DifferentialEvolution::initializePopulation(RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
+void DifferentialEvolution::initializePopulation(RV_SET_INITIAL_VALUES_FUNCTION fun, void *data)
 {
 	pimpl->initializePopulation(fun, data);
 }

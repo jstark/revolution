@@ -4,7 +4,7 @@ using revolution::ObjectiveFunction;
 
 
 /*---------------------------------------------------------------------------*/
-ObjectiveFunction::ObjectiveFunction(unsigned int dim, unsigned int obj, RVObjectiveEvaluationFun fun, void *data)
+ObjectiveFunction::ObjectiveFunction(unsigned int dim, unsigned int obj, RV_OBJECTIVE_EVALUATION_FUNCTION fun, void *data)
 		: dimensionality(dim), objectivesNumber(obj), evalf(fun), userData(data)
 {
 
@@ -29,7 +29,7 @@ void ObjectiveFunction::eval(struct RVArray *const dv, struct RVArray *obj) cons
 }
 
 /*---------------------------------------------------------------------------*/
-ObjectiveFunction* ObjectiveFunction::create(unsigned int dim, unsigned int objs, RVObjectiveEvaluationFun fun, void *data)
+ObjectiveFunction* ObjectiveFunction::create(unsigned int dim, unsigned int objs, RV_OBJECTIVE_EVALUATION_FUNCTION fun, void *data)
 {
 	ObjectiveFunction* objfun = 0;
 

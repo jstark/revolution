@@ -21,13 +21,13 @@ public:
 	void eval(const ObjectiveFunction& fun);
 	void eval(struct RVObjectiveFunction *obj);
 	double f(int index) const;
-    void constrain(RVConstrainParam fun, void *data);
+    void constrain(RV_CONSTRAIN_PARAMS_FUNCTION fun, void *data);
 
 	int dim() const;
 	int obj() const;
 
 	void swap(Atom& rhs);
-	void initialize(RVPopulationSetInitialValues fun, void *data);
+	void initialize(RV_SET_INITIAL_VALUES_FUNCTION fun, void *data);
 
 private:
 	std::vector<double> params;

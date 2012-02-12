@@ -14,7 +14,7 @@ class DLL_HIDDEN Population
 public:
 	Population(int parents, int offsprings, int dim, int obj);
 
-	void initialize(RVPopulationSetInitialValues fun, void *data);
+	void initialize(RV_SET_INITIAL_VALUES_FUNCTION fun, void *data);
 	std::vector<AType *> mem_ref();
 private:
 	std::vector<AType> atoms;
@@ -30,7 +30,7 @@ Population<AType>::Population(int parents, int offsprings, int dim, int obj)
 
 /*---------------------------------------------------------------------------*/
 template<typename AType>
-void Population<AType>::initialize(RVPopulationSetInitialValues fun, void *data)
+void Population<AType>::initialize(RV_SET_INITIAL_VALUES_FUNCTION fun, void *data)
 {
 	for (typename std::vector<AType>::size_type sz = 0;
 		sz != atoms.size(); ++sz)

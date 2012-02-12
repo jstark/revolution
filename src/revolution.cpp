@@ -90,7 +90,7 @@ void RVArraySetElementAtIndex(struct RVArray *array, size_t index, double value)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RVObjectiveEvaluationFun fun, void *data)
+struct RVObjectiveFunction* RVObjectiveFunctionCreate(int dim, int objs, RV_OBJECTIVE_EVALUATION_FUNCTION fun, void *data)
 {
 	ObjectiveFunction *objfun = ObjectiveFunction::create(dim, objs, fun, data);
 	struct RVObjectiveFunction *wrapper = 0;
@@ -128,7 +128,7 @@ int RVObjectiveFunctionGetNumberOfObjectives(struct RVObjectiveFunction *f)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-RVObjectiveEvaluationFun RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *f)
+RV_OBJECTIVE_EVALUATION_FUNCTION RVObjectiveFunctionGetEvalFun(struct RVObjectiveFunction *f)
 {
     if (f)
     {
@@ -178,7 +178,7 @@ struct RVBasicEvolutionStrategy* RVBasicEvolutionStrategyCreate(int mu, int rho,
 }
 
 /*---------------------------------------------------------------------------*/
-void RVBasicEvolutionStrategyInitializePopulation(struct RVBasicEvolutionStrategy *es, RVPopulationSetInitialValues fun, void *data)
+void RVBasicEvolutionStrategyInitializePopulation(struct RVBasicEvolutionStrategy *es, RV_SET_INITIAL_VALUES_FUNCTION fun, void *data)
 {
 	if (es)
 	{
@@ -189,7 +189,7 @@ void RVBasicEvolutionStrategyInitializePopulation(struct RVBasicEvolutionStrateg
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategySetParameterConstraints(struct RVBasicEvolutionStrategy *es, RVConstrainParam fun, void *data)
+void RVBasicEvolutionStrategySetParameterConstraints(struct RVBasicEvolutionStrategy *es, RV_CONSTRAIN_PARAMS_FUNCTION fun, void *data)
 {
     if (es)
     {
@@ -211,7 +211,7 @@ void RVBasicEvolutionStrategyStart(struct RVBasicEvolutionStrategy *es)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategyOnGenerationFinished(struct RVBasicEvolutionStrategy *es, RVGenerationFinished fun, void *data)
+void RVBasicEvolutionStrategyOnGenerationFinished(struct RVBasicEvolutionStrategy *es, RV_BASIC_GENERATION_FINISHED_FUNCTION fun, void *data)
 {
 	if (es)
 	{
@@ -222,7 +222,7 @@ void RVBasicEvolutionStrategyOnGenerationFinished(struct RVBasicEvolutionStrateg
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategySetTerminationCriteria(struct RVBasicEvolutionStrategy *es, RVEvolutionShouldTerminate fun, void *data)
+void RVBasicEvolutionStrategySetTerminationCriteria(struct RVBasicEvolutionStrategy *es, RV_BASIC_SHOULD_TERMINATE_FUNCTION fun, void *data)
 {
     if (es)
     {
@@ -257,7 +257,7 @@ double RVBasicEvolutionStrategyGetObjective(struct RVBasicEvolutionStrategy *es,
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVBasicEvolutionStrategySetRNG(struct RVBasicEvolutionStrategy *es, RVRandom fun, void *data)
+void RVBasicEvolutionStrategySetRNG(struct RVBasicEvolutionStrategy *es, RV_RANDOM_FUNCTION fun, void *data)
 {
 	if (es)
 	{
@@ -321,7 +321,7 @@ struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum,
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVDifferentialEvolutionInitializePopulation(struct RVDifferentialEvolution *de, RVDifferentialEvolutionPopulationSetInitialValues fun, void *data)
+void RVDifferentialEvolutionInitializePopulation(struct RVDifferentialEvolution *de, RV_SET_INITIAL_VALUES_FUNCTION fun, void *data)
 {
 	if (de)
 	{
@@ -332,7 +332,7 @@ void RVDifferentialEvolutionInitializePopulation(struct RVDifferentialEvolution 
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionOnGenerationFinished fun, void *data)
+void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvolution *de, RV_DE_GENERATION_FINISHED_FUNCTION fun, void *data)
 {
 	if (de)
 	{
@@ -343,7 +343,7 @@ void RVDifferentialEvolutionSetOnGenerationFinishedFun(struct RVDifferentialEvol
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RVDifferentialEvolutionShouldTerminate fun, void *data)
+void RVDifferentialEvolutionSetTerminationFun(struct RVDifferentialEvolution *de, RV_DE_SHOULD_TERMINATE_FUNCTION fun, void *data)
 {
 	if (de)
 	{

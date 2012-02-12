@@ -42,7 +42,7 @@ void Atom::eval(struct RVObjectiveFunction *obj)
     struct RVArray dv = { &params[0], params.size() };
     struct RVArray ov = { &objectives[0], params.size() };
 	void *data = RVObjectiveFunctionGetUserData(obj);
-	RVObjectiveEvaluationFun fun = RVObjectiveFunctionGetEvalFun(obj);
+	RV_OBJECTIVE_EVALUATION_FUNCTION fun = RVObjectiveFunctionGetEvalFun(obj);
 	fun(&dv, &ov, data);
 }
 
@@ -72,7 +72,7 @@ void Atom::swap(Atom& rhs)
 }
 
 /*---------------------------------------------------------------------------*/
-void Atom::initialize(RVPopulationSetInitialValues fun, void *data)
+void Atom::initialize(RV_SET_INITIAL_VALUES_FUNCTION fun, void *data)
 {
 	if (fun)
 	{
@@ -83,7 +83,7 @@ void Atom::initialize(RVPopulationSetInitialValues fun, void *data)
 }
 
 /*---------------------------------------------------------------------------*/
-void Atom::constrain(RVConstrainParam fun, void *data)
+void Atom::constrain(RV_CONSTRAIN_PARAMS_FUNCTION fun, void *data)
 {
     if (fun)
     {

@@ -10,18 +10,18 @@ namespace revolution
 	public:
 		const unsigned int dim() const;
 		const unsigned int objectives() const;
-		RVObjectiveEvaluationFun evalFun() const { return evalf; }
+		RV_OBJECTIVE_EVALUATION_FUNCTION evalFun() const { return evalf; }
 		void *data() { return userData; }
 		void eval(struct RVArray *const dv, struct RVArray *obj) const;
 
-		static ObjectiveFunction* create(unsigned int dim, unsigned int objs, RVObjectiveEvaluationFun fun, void *data);
+		static ObjectiveFunction* create(unsigned int dim, unsigned int objs, RV_OBJECTIVE_EVALUATION_FUNCTION fun, void *data);
 	private:
-		ObjectiveFunction(unsigned int dim, unsigned int obj, RVObjectiveEvaluationFun fun, void *data);
+		ObjectiveFunction(unsigned int dim, unsigned int obj, RV_OBJECTIVE_EVALUATION_FUNCTION fun, void *data);
 		ObjectiveFunction(const ObjectiveFunction& rhs); // not implemented
 		ObjectiveFunction& operator=(const ObjectiveFunction& rhs); // not implemented
 		unsigned int dimensionality;
 		unsigned int objectivesNumber;
-		RVObjectiveEvaluationFun evalf;
+		RV_OBJECTIVE_EVALUATION_FUNCTION evalf;
 		void *userData;
 	};//~ ObjectiveFunction
 }//~revolution
