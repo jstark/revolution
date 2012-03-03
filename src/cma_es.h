@@ -6,16 +6,14 @@
 namespace revolution
 {
 
-class ObjectiveFunction; 
-
 class DLL_HIDDEN CmaEs
 {
 public:
-	static CmaEs* create(unsigned int lambda, ObjectiveFunction *fun);
+    static CmaEs* create(unsigned int lambda, struct RVObjectiveFunction *fun);
 	~CmaEs();
 	void setWrapperObject(RVCmaEvolutionStrategy *w);
 private:
-	CmaEs(unsigned int lambda, ObjectiveFunction *fun);
+    CmaEs(unsigned int lambda, struct RVObjectiveFunction *fun);
 	
 	class CmaEsPriv;
 	CmaEsPriv *impl;

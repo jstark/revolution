@@ -280,33 +280,6 @@ void RVBasicEvolutionStrategyDestroy(struct RVBasicEvolutionStrategy *es)
 
 /*---------------------------------------------------------------------------*/
 extern "C"
-RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, RVObjectiveFunction *fun)
-{
-	CmaEs *es = CmaEs::create(lambda, GET_WRAPPED_OBJECT(fun));
-	RVCmaEvolutionStrategy *wrapper = 0;
-	if (es)
-	{
-		wrapper = CONSTRUCT_POD_OBJECT(RVCmaEvolutionStrategy);
-		SET_WRAPPED_OBJECT(wrapper, es);
-		es->setWrapperObject(wrapper);
-	}
-	return wrapper;
-}
-
-/*---------------------------------------------------------------------------*/
-extern "C"
-void RVCmaEvolutionStrategyDestroy(RVCmaEvolutionStrategy *es)
-{
-	if (es)
-	{
-		CmaEs *cma_es = GET_WRAPPED_OBJECT(es);
-		delete cma_es;
-		FREE_POD_OBJECT(es);
-	}
-}
-
-/*---------------------------------------------------------------------------*/
-extern "C"
 struct RVDifferentialEvolution *RVDifferentialEvolutionCreate(unsigned int pnum, double Fp, double CRp, struct RVObjectiveFunction *fun)
 {
     DifferentialEvolution *de = DifferentialEvolution::create(pnum, Fp, CRp, fun);
@@ -396,5 +369,32 @@ void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de)
         DifferentialEvolution *in = GET_WRAPPED_OBJECT(de);
         delete in;
         FREE_POD_OBJECT(de);
+    }
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, RVObjectiveFunction *fun)
+{
+    CmaEs *es = CmaEs::create(lambda, fun);
+    RVCmaEvolutionStrategy *wrapper = 0;
+    if (es)
+    {
+        wrapper = CONSTRUCT_POD_OBJECT(RVCmaEvolutionStrategy);
+        SET_WRAPPED_OBJECT(wrapper, es);
+        es->setWrapperObject(wrapper);
+    }
+    return wrapper;
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
+void RVCmaEvolutionStrategyDestroy(RVCmaEvolutionStrategy *es)
+{
+    if (es)
+    {
+        CmaEs *cma_es = GET_WRAPPED_OBJECT(es);
+        delete cma_es;
+        FREE_POD_OBJECT(es);
     }
 }
