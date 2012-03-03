@@ -21,7 +21,7 @@ public:
 	
 	unsigned int lambda;
     struct RVObjectiveFunction *objFun;
-	RVCmaEvolutionStrategy *wrapper;
+    struct RVCmaEvolutionStrategy *wrapper;
 };
 
 /*---------------------------------------------------------------------------*/
