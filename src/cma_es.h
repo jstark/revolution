@@ -12,6 +12,7 @@ public:
     static CmaEs* create(unsigned int lambda, struct RVObjectiveFunction *fun);
 	~CmaEs();
 	void setWrapperObject(RVCmaEvolutionStrategy *w);
+    void setTermination(RV_CMA_SHOULD_TERMINATE_FUNCTION fun, void *data);
 private:
     CmaEs(unsigned int lambda, struct RVObjectiveFunction *fun);
 	

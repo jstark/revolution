@@ -9,19 +9,27 @@ class CmaEs::CmaEsPriv
 {
 public:
     CmaEsPriv(unsigned int l, struct RVObjectiveFunction *fun)
-		: lambda(l), objFun(fun), wrapper(0) 
+        : lambda_(l), objectiveFunction_(fun), wrapper_(0)
 	{
 		
 	}
 	
 	void setWrapperObject(RVCmaEvolutionStrategy *w)
 	{
-		wrapper = w;
+        wrapper_ = w;
 	}
+
+    void setTermination(RV_CMA_SHOULD_TERMINATE_FUNCTION fun, void *data)
+    {
+        evolutionShouldTerminate_ = fun;
+        evolutionShouldTerminateData_ = data;
+    }
 	
-	unsigned int lambda;
-    struct RVObjectiveFunction *objFun;
-    struct RVCmaEvolutionStrategy *wrapper;
+    unsigned int lambda_;
+    struct RVObjectiveFunction *objectiveFunction_;
+    struct RVCmaEvolutionStrategy *wrapper_;
+    RV_CMA_SHOULD_TERMINATE_FUNCTION evolutionShouldTerminate_;
+    void *evolutionShouldTerminateData_;
 };
 
 /*---------------------------------------------------------------------------*/
@@ -40,7 +48,13 @@ CmaEs::~CmaEs()
 /*---------------------------------------------------------------------------*/
 void CmaEs::setWrapperObject(RVCmaEvolutionStrategy *w)
 {
-	impl->setWrapperObject(w);	
+    impl->setWrapperObject(w);
+}
+
+/*---------------------------------------------------------------------------*/
+void CmaEs::setTermination(RV_CMA_SHOULD_TERMINATE_FUNCTION fun, void *data)
+{
+    impl->setTermination(fun, data);
 }
 
 /*---------------------------------------------------------------------------*/

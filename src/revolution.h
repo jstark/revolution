@@ -439,10 +439,47 @@ DLL_PUBLIC void RVDifferentialEvolutionStart(struct RVDifferentialEvolution *de)
 */
 DLL_PUBLIC void RVDifferentialEvolutionDestroy(struct RVDifferentialEvolution *de);
 
-/* preliminary support for cma algorithm */
+/*! \struct RVCmaEvolutionStrategy;
+ *  \brief Represents a CMA evolution algorithm.
+ *  @see RVCmaEvolutionStrategyCreate()
+ */
 struct RVCmaEvolutionStrategy;
+
+/*! \fn struct RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, struct RVObjectiveFunction *fun);
+ *  \brief Creates a CMA evolution object.
+ *  Use this function to build a CMA evolution object.
+ *  \param lambda the number of offsprings the evolution will use. Must be equal or greater to 1.
+ *  \param fun the objective function to optimize. Must not be NULL.
+ *  \return a CMA evolution object, or NULL if any of the parameters were invalid.
+ *  @see RVCmaEvolutionStrategyDestroy
+ */
 DLL_PUBLIC struct RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, struct RVObjectiveFunction *fun);
 
+/*! \typedef int (*RV_CMA_SHOULD_TERMINATE_FUNCTION)(struct RVCmaEvolutionStrategy *cma, unsigned int g, void *data);
+ *  \brief A function type definition for terminating a CMA evolution.
+ *  \param es a pointer to a CMA evolution.
+ *  \param g the current generation number
+ *  \param data the user-supplied data, if any
+ *  \return Returns 1 if the process should terminate.
+ *  @see RVCmaEvolutionSetTerminationFun()
+ */
+typedef int (*RV_CMA_SHOULD_TERMINATE_FUNCTION)(struct RVCmaEvolutionStrategy *cma, unsigned int g, void *data);
+
+/*! \fn void RVCmaEvolutionSetTerminationFun(struct RVCmaEvolution *cma, RV_CMA_SHOULD_TERMINATE_FUNCTION fun, void *data);
+ *  \brief Checks if an evolution should terminate after each generation.
+ *  \param es a pointer to a CMA evolution. The function will check for a NULL value.
+ *  \param fun the function that will actually check whether the evolution should terminate.
+ *  \param data the user-supplied data, if any.
+ */
+DLL_PUBLIC void RVCmaEvolutionSetTerminationFun(struct RVCmaEvolutionStrategy *cma, RV_CMA_SHOULD_TERMINATE_FUNCTION fun, void *data);
+
+/*! \fn void RVCmaEvolutionStrategyDestroy(struct RVCmaEvolutionStrategy *cma);
+ *  \brief Destroys a CMA evolution object.
+ *  Use this function to destroy a CMA evolution object.
+ *  \param cma the CMA evolution strategy to destroy and free memory. The function will check
+ *  for a NULL argument.
+ *  @see RVCmaEvolutionStrategyCreate
+ */
 DLL_PUBLIC void RVCmaEvolutionStrategyDestroy(struct RVCmaEvolutionStrategy *es);
 #ifdef __cplusplus
 }

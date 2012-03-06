@@ -389,6 +389,17 @@ RVCmaEvolutionStrategy* RVCmaEvolutionStrategyCreate(unsigned int lambda, RVObje
 
 /*---------------------------------------------------------------------------*/
 extern "C"
+void RVCmaEvolutionSetTerminationFun(struct RVCmaEvolutionStrategy *cma, RV_CMA_SHOULD_TERMINATE_FUNCTION fun, void *data)
+{
+    if (cma)
+    {
+        CmaEs *in = GET_WRAPPED_OBJECT(cma);
+        in->setTermination(fun, data);
+    }
+}
+
+/*---------------------------------------------------------------------------*/
+extern "C"
 void RVCmaEvolutionStrategyDestroy(RVCmaEvolutionStrategy *es)
 {
     if (es)
