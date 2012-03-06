@@ -21,17 +21,11 @@ namespace
         
         ref = revolution::ObjectiveFunction::create(5, 2, 0, 0);
         ASSERT_EQ(ref, (void *)0) << "Initialized objective function with invalid EVALFUN!";
-        
-        revolution::ObjectiveFunction::create(-5, 2, eval, 0);
+
+        ref = revolution::ObjectiveFunction::create(0, 2, eval, 0);
         ASSERT_EQ(ref, (void *)0) << "Initialized objective function with invalid n!";
 
-        revolution::ObjectiveFunction::create(0, 2, eval, 0);
-        ASSERT_EQ(ref, (void *)0) << "Initialized objective function with invalid n!";
-
-        revolution::ObjectiveFunction::create(5, -2, eval, 0);
-        ASSERT_EQ(ref, (void *)0) << "Initialized objective function with invalid m!";
-
-        revolution::ObjectiveFunction::create(5, 0, eval, 0);
+        ref = revolution::ObjectiveFunction::create(5, 0, eval, 0);
         ASSERT_EQ(ref, (void *)0) << "Initialized objective function with invalid m!";
 
         delete ref;
